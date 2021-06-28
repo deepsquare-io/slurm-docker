@@ -122,6 +122,8 @@ By using an admin token from `root` or the `SlurmUser`, any request to the REST 
 
 ### Request
 
+See [*Slurm Workload Manager - Slurm Rest API*](https://slurm.schedmd.com/rest_api.html).
+
 Given the environment variable `SLURM_JWT` set:
 
 ```sh
