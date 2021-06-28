@@ -58,8 +58,6 @@ services:
       - ./conf:/etc/slurm:ro
     networks:
       - slurmctl-net
-    cap_add:
-      - IPC_OWNER  # Only used for REST Api
 
 networks:
   slurmctl-net:
