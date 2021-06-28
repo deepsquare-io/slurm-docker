@@ -6,9 +6,9 @@ services:
     depends_on:
       - "slurmd-0"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./certs/slurmrest.csquare.gcloud.chained.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.chained.crt
-      - ./certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/certs/slurmrest.csquare.gcloud.chained.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.chained.crt
+      - ./nginx/certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
     ports:
       - 80:80
       - 443:443
@@ -46,7 +46,7 @@ services:
       - "slurmctl"
     hostname: slurmd-0
     container_name: slurmd-0
-    privileged: true
+    privileged: true  # Only used for REST Api
     expose:
       - "6820"
       - "6818"
@@ -59,7 +59,7 @@ services:
     networks:
       - slurmctl-net
     cap_add:
-      - IPC_OWNER
+      - IPC_OWNER  # Only used for REST Api
 
 networks:
   slurmctl-net:

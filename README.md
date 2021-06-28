@@ -6,7 +6,9 @@ This is a one node cluster.
 
 ### Setup NGINX Reverse Proxy
 
-Fetch a private key `slurmrest.csquare.gcloud.key` and a chained certificate `slurmrest.csquare.gcloud.chained.crt` from a CA, and put them in the `certs` directory.
+-  Fetch a private key `slurmrest.csquare.gcloud.key` and a chained certificate `slurmrest.csquare.gcloud.chained.crt` from a CA, and put them in the `certs` directory.
+
+NGINX configuration is stored in the `nginx` folder.
 
 Certificate request was :
 
@@ -88,9 +90,11 @@ mOecBWymw1iIAqEEDgaDN3JPDjUvXlAIY3Oem7lF
 
 ### Setup Slurm
 
-Add the MUNGE key `munge.key` and the `jwt_hs256.key` to the `secrets` directory.
+-  Add the MUNGE key `munge.key` and the `jwt_hs256.key` to the `secrets` directory.
 
-Configuration is stored in the `conf` folder. The `conf` folder is bound to `/etc/slurm`.
+-  Configuration is stored in the `conf` folder. The `conf` folder is bound to `/etc/slurm`.
+
+-  Bind the `ldap-certificate.pem` and the `sssd.conf` accordingly.
 
 ## Running
 
@@ -114,7 +118,7 @@ Fetch a token for a specific user:
 scontrol token username=<user>
 ```
 
-An admin token (`root` or `SlurmUser`) can be logged to the REST API under any account.
+By using an admin token from `root` or the `SlurmUser`, any request to the REST API is permitted under any account.
 
 ### Request
 

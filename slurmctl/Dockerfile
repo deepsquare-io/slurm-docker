@@ -26,7 +26,7 @@ RUN bash /configure_libjwt_path.sh && ldconfig && rm -f /configure_libjwt_path.s
 RUN mkdir /run/munge && chown munge: /run/munge
 ENV SLURM_CONF=/etc/slurm/slurm.conf
 
-EXPOSE 6817/tcp 6820/tcp
+EXPOSE 6817/tcp
 
 # Set up entrypoint
 COPY entrypoint.sh /

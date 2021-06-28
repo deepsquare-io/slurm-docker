@@ -3,7 +3,8 @@
 set -m
 
 # Munge
-cp /secrets/munge.key /etc/munge/munge.key && chown munge: /etc/munge/munge.key
+cp /secrets/munge.key /etc/munge/munge.key
+chown munge: /etc/munge/munge.key
 su -s /bin/bash -c munged munge
 
 # SSSD
@@ -15,13 +16,12 @@ do
   sleep 1
 done
 
-# Slurm
-mkdir -p /var/spool/slurmctl
-mkdir -p /var/run/slurmctl
+# Slurm Controller
+mkdir -p /var/{spool,run}/{slurm,slurmctl}
 mkdir -p /var/log/slurm
-mkdir -p /var/spool/slurm
-mkdir -p /var/run/slurm && cp /secrets/jwt_hs256.key /var/spool/slurmctl/
-chown -R slurm: /var/spool/slurm /var/run/slurm /var/run/slurmctl /var/spool/slurmctl
+cp /secrets/jwt_hs256.key /var/spool/slurmctl/jwt_hs256.key
+chown -R slurm: /var/spool/{slurmctl,slurm} /var/run/{slurmctl,slurm}
 slurmctld
 
+# Log to stdout
 tail -f /var/log/slurm/slurmctld.log
