@@ -10,7 +10,6 @@ services:
       - ./nginx/certs/slurmrest.csquare.gcloud.chained.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.chained.crt
       - ./nginx/certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
     ports:
-      - 80:80
       - 443:443
     networks:
       - slurmctl-net
