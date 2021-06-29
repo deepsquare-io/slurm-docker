@@ -1,6 +1,4 @@
-# Docker Compose Slurm Controller + Slurm + REST API
-
-This is a one node cluster.
+# Docker Compose Slurm DB + Controller + [Slurm + REST API]
 
 ## Configuration
 
@@ -88,7 +86,7 @@ mOecBWymw1iIAqEEDgaDN3JPDjUvXlAIY3Oem7lF
 -----END CERTIFICATE REQUEST-----
 ```
 
-### Setup Slurm
+### Setup Slurm and SlurmDB
 
 -  Add the MUNGE key `munge.key` and the `jwt_hs256.key` to the `secrets` directory.
 
