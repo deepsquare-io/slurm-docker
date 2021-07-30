@@ -1,0 +1,7 @@
+**/certs/*
+**/secrets/*
+**/state
+**/logs
+**/slurm_powersave/slurmctl-keypair
+
+!**/.gitkeep

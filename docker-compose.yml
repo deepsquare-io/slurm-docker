@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  slurmctl:
+    image: slurm-base
+    restart: always
+    pull_policy: never
+    privileged: true
+    network_mode: host
+    command: ['slurmctld']
+    build:
+      context: ./slurm
+      dockerfile: Dockerfile
+    hostname: slurm-controller
+    container_name: slurm-controller
+    dns:
+      - 172.17.0.1
+    # ports:
+    #   - 6817:6817
+    volumes:
+      - /home/user/nfs-mount/configurations/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
+      - /home/user/nfs-mount/configurations/sssd.conf:/etc/sssd/sssd.conf:ro
+      - /home/user/nfs-mount/secrets:/secrets:ro
+      - /home/user/nfs-mount/configurations/slurm:/etc/slurm:ro
+      - ./logs:/var/log/slurm
+      - ./state:/var/spool/slurmctl
+      - ./bin/fakemail:/usr/bin/fakemail:ro
