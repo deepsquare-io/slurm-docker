@@ -14,6 +14,8 @@ do
 done
 
 # Slurm
+rm -rf /var/run/slurm/*.pid
+rm -rf /var/run/slurm*.pid
 mkdir -p /var/spool/slurmctl
 mkdir -p /var/run/slurmctl
 mkdir -p /var/log/slurm

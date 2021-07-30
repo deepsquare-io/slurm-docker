@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Input should look like this for an end record:
+# $1: '-s' (the subject argument keyword)
+# $2: The subject itself
+# $3: The To: email address.
+
+JOB_ID=$(echo "$2" | sed 's/.*Job_id=\([0-9]*\).*/\1/')
+
+BODY=$(jq -n --arg jobid "$JOB_ID" \
+             '{properties: {}, routing_key: "job_completion", payload: $jobid, payload_encoding: "string"}')
+
+curl -i -XPOST -L -u compute-node:changeme -d "$BODY" http://queue.csquare.app/api/exchanges/%2F/amq.default/publish
+
