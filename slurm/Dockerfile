@@ -30,6 +30,9 @@ RUN bash /configure_libjwt_path.sh && ldconfig && rm -f /configure_libjwt_path.s
 RUN mkdir /run/munge && chown munge: /run/munge
 ENV SLURM_CONF=/etc/slurm/slurm.conf
 
+# API user
+RUN groupadd -r api && useradd --no-log-init -r -g api api
+
 EXPOSE 6817/tcp 6818/tcp 6819/tcp 6820/tcp
 
 # Set up entrypoint

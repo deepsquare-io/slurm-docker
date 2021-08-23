@@ -58,7 +58,7 @@ slurmd
 
 sleep 2
 
-env SLURM_JWT=daemon slurmrestd -vvvvv 0.0.0.0:6820 >> /var/log/slurm/slurmrestd.log &
+su -s /bin/sh -c "env SLURM_JWT=daemon slurmrestd -vvvvv 0.0.0.0:6820" api >> /var/log/slurm/slurmrestd.log &
 
 sleep 2
 
