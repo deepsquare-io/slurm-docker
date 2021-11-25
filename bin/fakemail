@@ -7,8 +7,16 @@
 
 JOB_ID=$(echo "$2" | sed 's/.*Job_id=\([0-9]*\).*/\1/')
 
-BODY=$(jq -n --arg jobid "$JOB_ID" \
-             '{properties: {}, routing_key: "job_completion", payload: $jobid, payload_encoding: "string"}')
+ROUTING_KEY="xt_$3"
 
-curl -i -XPOST -L -u compute-node:changeme -d "$BODY" http://queue.csquare.app/api/exchanges/%2F/amq.default/publish
+PAYLOAD=$(jq -n --arg jobid "$JOB_ID" \
+             '{"pattern":"jobs/complete", "data": {"id": $jobid}}')
+
+BODY=$(jq -n --arg payload "$PAYLOAD" --arg routing_key "$ROUTING_KEY" \
+             '{properties: {}, routing_key: $routing_key, payload: $payload, payload_encoding: "string"}')
+
+echo "curl -i -XPOST -L -u  'slurm:redacted' -d ""$BODY"" http://queue.csquare.app/api/exchanges/%2F/amq.default/publish" >> /var/log/fakemail.log
+
+curl -i -X POST -L -u 'slurm:f_4UyDHC7!w$Cc2KSHFv' -d "$BODY" https://queue.csquare.app/api/exchanges/%2F/amq.default/publish
+
 

@@ -3,7 +3,7 @@
 set -m
 
 # Munge
-cp /secrets/munge.key /etc/munge/munge.key
+cp /secrets/munge.key /etc/munge/munge.key || echo "Copy file has failed"
 chown munge: /etc/munge/munge.key
 su -s /bin/bash -c munged munge
 
@@ -18,8 +18,8 @@ done
 
 # Slurm Controller
 mkdir -p /var/{spool,run}/{slurm,slurmctl}
-mkdir -p /var/log/slurm
-cp /secrets/jwt_hs256.key /var/spool/slurmctl/jwt_hs256.key
+mkdir -p /var/log/slurm/
+cp /secrets/jwt_hs256.key /var/spool/slurmctl/jwt_hs256.key || echo "Copy file has failed"
 chown -R slurm: /var/spool/{slurmctl,slurm} /var/run/{slurmctl,slurm}
 
 if [ "$1" = "slurmdbd" ]
