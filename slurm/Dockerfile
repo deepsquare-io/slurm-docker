@@ -28,6 +28,8 @@ RUN apt-get update && apt install -y hpc-essentials && rm -rf /var/lib/apt/lists
 COPY configure_libjwt_path.sh /
 RUN bash /configure_libjwt_path.sh && ldconfig && rm -f /configure_libjwt_path.sh
 
+COPY lib/jobcomp/ /usr/local/lib/slurm
+
 # Munge & Slurm configurations
 RUN mkdir /run/munge && chown munge: /run/munge
 ENV SLURM_CONF=/etc/slurm/slurm.conf
@@ -37,4 +39,3 @@ EXPOSE 6817/tcp 6818/tcp 6819/tcp 6820/tcp
 # Set up entrypoint
 COPY entrypoint.sh /
 ENTRYPOINT ["bash", "/entrypoint.sh"]
-
