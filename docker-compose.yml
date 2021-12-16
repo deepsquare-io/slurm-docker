@@ -22,7 +22,8 @@ services:
       - /home/user/nfs-mount/munge.key:/secrets/munge.key:ro
       - /home/user/nfs-mount/slurmctl/jwt_hs256.key:/secrets/jwt_hs256.key:ro
       - /home/user/nfs-mount/site-specific/sion/slurmctl:/etc/slurm:ro
-      - ./logs:/var/log/slurm
+      # This will create a memory leak (obviously). Please, let docker handle the logs.
+      #- ./logs:/var/log/slurm
       - ./state:/var/spool/slurmctl
       - ./jobs-costs:/opt/jobs-costs
       - ./bin/fakemail:/usr/bin/fakemail:ro
