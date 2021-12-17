@@ -1,3 +1,25 @@
+FROM ubuntu:18.04 as jobcomp-builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /build
+
+RUN apt update \
+  && apt install -y \
+  ninja-build \
+  git \
+  build-essential \
+  cmake \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN git clone --recurse-submodules --depth 1 https://github.com/csquare-ai/jobcomp_report . \
+  && mkdir build \
+  && cd build \
+  && mkdir /artifacts \
+  && cmake .. -G "Ninja" -DCMAKE_INSTALL_PREFIX=/artifacts \
+  && ninja -j$(nproc) \
+  && ninja install
+
 FROM ubuntu:18.04
 
 # Install dependencies
@@ -28,7 +50,8 @@ RUN apt-get update && apt install -y hpc-essentials && rm -rf /var/lib/apt/lists
 COPY configure_libjwt_path.sh /
 RUN bash /configure_libjwt_path.sh && ldconfig && rm -f /configure_libjwt_path.sh
 
-COPY lib/jobcomp/ /usr/local/lib/slurm
+COPY --from=jobcomp-builder /artifacts/jobcomp_report.so /usr/local/lib/slurm/jobcomp_report.so
+COPY --from=jobcomp-builder /artifacts/jobcomp_report.a /usr/local/lib/slurm/jobcomp_report.a
 
 # Munge & Slurm configurations
 RUN mkdir /run/munge && chown munge: /run/munge
