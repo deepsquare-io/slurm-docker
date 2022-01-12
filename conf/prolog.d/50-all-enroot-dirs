@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+runtime_path="/run/enroot/user-$SLURM_JOB_UID"
+mkdir -p "$runtime_path"
+chown "$SLURM_JOB_UID:$(id -g "$SLURM_JOB_UID")" "$runtime_path"
+chmod 0775 "$(dirname "$runtime_path")"
+chmod 0700 "$runtime_path"
+
+cache_path="/opt/cache/enroot/group-$(id -g "$SLURM_JOB_UID")"
+mkdir -p "$cache_path"
+chown "$SLURM_JOB_UID:$(id -g "$SLURM_JOB_UID")" "$cache_path"
+chmod -R 0770 "$cache_path"
+
+data_path="/mnt/scratch/containers/user-$SLURM_JOB_UID"
+mkdir -p "$data_path"
+chown "$SLURM_JOB_UID:$(id -g "$SLURM_JOB_UID")" "$data_path"
+chmod 0700 "$data_path"
+

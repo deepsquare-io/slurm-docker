@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -ex
+
+export PATH=$PATH:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin
+
+nodefile="/tmp/slurm_nodelist.${SLURM_JOB_ID}"
+datadir="/mnt/scratch/beeond"
+clientdir="/opt/scratch/beeond"
+
+if [ -e $nodefile ] ; then
+  sudo beeond stop -n "${nodefile}" -d -P -L -c
+  rm -f ${nodefile}
+fi
+

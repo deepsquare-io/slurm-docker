@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -ex
+
+export PATH=$PATH:/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin
+
+nodefile="/tmp/slurm_nodelist.${SLURM_JOB_ID}"
+datadir="/mnt/scratch/beeond"
+clientdir="/opt/scratch/beeond"
+
+if [[ "${SLURM_JOB_PARTITION}" == *"beeond"* ]]; then
+  scontrol show hostnames "${SLURM_JOB_NODELIST}" > "${nodefile}"
+  timeout 60 sudo beeond start -n "${nodefile}" -d "${datadir}" -c "${clientdir}" -P -F
+fi

@@ -1,0 +1,11 @@
+#!/bin/bash
+set -ex
+
+EPILOG_DIR=/etc/slurm/epilog-slurmctld.d
+
+for script in ${EPILOG_DIR}/*; do
+   if [ -x "${script}" ]; then
+   source "${script}"
+   fi
+done
+
