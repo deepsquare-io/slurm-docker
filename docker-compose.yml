@@ -1,4 +1,4 @@
-version: '3.9'
+version: '2.4'
 services:
   nginx:
     image: nginx:alpine
@@ -7,8 +7,9 @@ services:
     depends_on:
       - "slurm-0"
     volumes:
+      - ./logs/nginx:/var/log/nginx
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/certs/slurmrest.csquare.gcloud.chained.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.chained.crt
+      - ./nginx/certs/slurmrest.csquare.gcloud.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.crt
       - ./nginx/certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
     # ports:
     #   - 443:443
@@ -35,7 +36,7 @@ services:
       - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
       - ./conf:/etc/slurm:ro
       - ./logs/slurmdb:/var/log/slurm
-
+      - /mnt/nfs/archive:/archive
   slurmctl:
     image: slurm-base
     restart: always
@@ -86,5 +87,7 @@ services:
       - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
       - ./conf:/etc/slurm:ro
       - ./logs/slurm:/var/log/slurm
+    cpus: 0.25
+    mem_limit: 256M
     # networks:
     #   - slurmctl-net

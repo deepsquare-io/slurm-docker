@@ -35,6 +35,12 @@ RUN groupadd -r api && useradd --no-log-init -r -g api api
 
 EXPOSE 6817/tcp 6818/tcp 6819/tcp 6820/tcp
 
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
 # Set up entrypoint
 COPY entrypoint.sh /
-ENTRYPOINT ["bash", "/entrypoint.sh"]
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/tini", "--", "/entrypoint.sh"]
+

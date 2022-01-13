@@ -24,11 +24,8 @@ chown -R slurm: /var/spool/{slurmctl,slurm} /var/run/{slurmctl,slurm}
 
 if [ "$1" = "slurmdbd" ]
 then
-slurmdbd
+slurmdbd -D
 
-sleep 2
-
-tail  -f /var/log/slurm/slurmdbd.log
 fi
 
 if [ "$1" = "slurmctld" ]
@@ -39,11 +36,10 @@ while ! nc -z 127.0.0.1 6819; do
   sleep 0.2
 done
 
-slurmctld
+echo "slurmdb connected."
 
-sleep 2
+slurmctld -D
 
-tail  -f /var/log/slurm/slurmctld.log
 fi
 
 if [ "$1" = "slurmd" ]
@@ -54,13 +50,12 @@ while ! nc -z 127.0.0.1 6817; do
   sleep 0.2
 done
 
-slurmd
+echo "slurmctl connected."
 
-sleep 2
+slurmd -D &
 
-su -s /bin/sh -c "env SLURM_JWT=daemon slurmrestd -vvvvv 0.0.0.0:6820" api >> /var/log/slurm/slurmrestd.log &
+su -s /bin/sh -c "env SLURM_JWT=daemon slurmrestd 127.0.0.1:6820" api &
 
-sleep 2
+wait
 
-tail -f /var/log/slurm/slurmd.log -f /var/log/slurm/slurmrestd.log
 fi
