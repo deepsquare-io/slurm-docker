@@ -24,11 +24,7 @@ chown -R slurm: /var/spool/{slurmctl,slurm} /var/run/{slurmctl,slurm}
 
 if [ "$1" = "slurmdbd" ]
 then
-slurmdbd
-
-sleep 2
-
-tail  -f /var/log/slurm/slurmdbd.log
+slurmdbd -D
 fi
 
 if [ "$1" = "slurmctld" ]
@@ -39,11 +35,7 @@ while ! nc -z slurmdbd.csquare.gcloud 6819; do
   sleep 0.2
 done
 rm -rf /var/run/slurmctld.pid
-slurmctld
-
-sleep 2
-
-tail  -f /var/log/slurm/slurmctld.log
+slurmctld -D
 fi
 
 if [ "$1" = "slurmd" ]
@@ -53,14 +45,9 @@ echo "Waiting slurmctl to launch on 6817..."
 while ! nc -z 127.0.0.1 6817; do
   sleep 0.2
 done
+slurmd &
 
-slurmd
+env SLURM_JWT=daemon slurmrestd -vvvvv 0.0.0.0:6820 &
 
-sleep 2
-
-env SLURM_JWT=daemon slurmrestd -vvvvv 0.0.0.0:6820 >> /var/log/slurm/slurmrestd.log &
-
-sleep 2
-
-tail -f /var/log/slurm/slurmd.log -f /var/log/slurm/slurmrestd.log
+wait
 fi

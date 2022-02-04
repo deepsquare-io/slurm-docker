@@ -1,57 +1,17 @@
-FROM ubuntu:18.04 as jobcomp-builder
+FROM quay.io/rockylinux/rockylinux:8.5
 
-ENV DEBIAN_FRONTEND=noninteractive
+COPY csquare.gcloud.ca.pem /etc/pki/ca-trust/source/anchors
 
-WORKDIR /build
-
-RUN apt update \
-  && apt install -y \
-  ninja-build \
-  git \
-  build-essential \
-  cmake \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN git clone --recurse-submodules --depth 1 https://github.com/csquare-ai/jobcomp_report . \
-  && mkdir build \
-  && cd build \
-  && mkdir /artifacts \
-  && cmake .. -G "Ninja" -DCMAKE_INSTALL_PREFIX=/artifacts \
-  && ninja -j$(nproc) \
-  && ninja install
-
-FROM ubuntu:18.04
-
-# Install dependencies
-RUN apt update && apt install -y \
-  gnupg \
-  sssd \
-  libnuma-dev \
-  libhwloc-dev \
-  libhttp-parser-dev \
-  libyaml-dev \
-  libreadline-dev \
-  libpam-sss \
-  libnss-sss \
-  munge \
-  curl \
-  bsdmainutils \
-  libmysqlclient-dev \
-  libcurl3-gnutls \
-  netcat \
-  ssh \
-  jq \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN wget -O- http://apt.csquare.gcloud:8080/gpg.key | tee -a /usr/share/keyrings/csquare-keyring.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/csquare-keyring.gpg] http://apt.csquare.gcloud:8080 unstable main contrib non-free" | tee -a /etc/apt/sources.list.d/csquare.list
-RUN apt-get update && apt install -y hpc-essentials && rm -rf /var/lib/apt/lists/*
-
-COPY configure_libjwt_path.sh /
-RUN bash /configure_libjwt_path.sh && ldconfig && rm -f /configure_libjwt_path.sh
-
-COPY --from=jobcomp-builder /artifacts/jobcomp_report.so /usr/local/lib/slurm/jobcomp_report.so
-COPY --from=jobcomp-builder /artifacts/jobcomp_report.a /usr/local/lib/slurm/jobcomp_report.a
+RUN update-ca-trust \
+  && dnf install -y \
+  dnf-plugins-core \
+  epel-release \
+  && dnf config-manager --add-repo https://csquare:VCyV78sQ@yum.csquare.gcloud/yum.repo \
+  && dnf install -y \
+  slurm \
+  slurm-slurmctld \
+  jobcomp-report \
+  && dnf clean all
 
 # Munge & Slurm configurations
 RUN mkdir /run/munge && chown munge: /run/munge
