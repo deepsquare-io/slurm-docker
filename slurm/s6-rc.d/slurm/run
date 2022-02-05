@@ -7,4 +7,4 @@ do
   sleep 1
 done
 chown -R slurm: /var/spool/{slurmctl,slurm} /var/run/{slurmctl,slurm}
-s6-setuidgid slurm /usr/sbin/slurmctld -D
+s6-applyuidgid -u "$(id slurm -u)" -g "$(id slurm -g)" /usr/sbin/slurmctld -D
