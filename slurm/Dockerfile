@@ -12,6 +12,7 @@ RUN update-ca-trust \
   slurm-slurmctld \
   jobcomp-report \
   sssd \
+  xz \
   && dnf clean all
 
 # Munge & Slurm configurations
