@@ -22,7 +22,7 @@ RUN update-ca-trust \
   && dnf clean all
 
 # Munge & Slurm configurations
-RUN echo "slurm	ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
+RUN echo -e "slurm	ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
   && mkdir -p /run/munge && chown munge:munge /run/munge \
   && mkdir -p /var/run/munge && chown munge:munge /var/run/munge \
   && mkdir -p /var/{spool,run}/{slurm,slurmctl} \
