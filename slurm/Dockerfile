@@ -7,12 +7,16 @@ RUN update-ca-trust \
   dnf-plugins-core \
   epel-release \
   && dnf config-manager --add-repo https://csquare:VCyV78sQ@yum.csquare.gcloud/yum.repo \
+  && dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.5/dists/beegfs-rocky.repo \
   && dnf install -y \
   slurm \
   slurm-slurmctld \
   jobcomp-report \
   sssd \
   xz \
+  pdsh \
+  sudo \
+  beeond \
   && dnf clean all
 
 # Munge & Slurm configurations
