@@ -1,4 +1,4 @@
 #!/bin/sh
 cp /secrets/munge.key /etc/munge/munge.key || echo "Copy file has failed"
 chown munge: /etc/munge/munge.key
-s6-setuidgid -u munge -g munge /usr/sbin/munged -F
+s6-setuidgid munge /usr/sbin/munged -F
