@@ -20,12 +20,12 @@ RUN mkdir -p /run/munge && chown munge: /run/munge \
   && mkdir -p /var/log/slurm/ \
   && mkdir -p /root/.ssh \
   && chmod 700 /root/.ssh \
-  && sh -c "cat << END > /root/.ssh/config \
-  Host * \
-  StrictHostKeyChecking no \
-  END" \
-  && chown -R slurm:slurm /home/ldap-users/slurm/
+  && echo "Host *\n\
+  StrictHostKeyChecking no\n" \
+  > /root/.ssh/config
 ENV SLURM_CONF=/etc/slurm/slurm.conf
+
+COPY s6-rc.d/ /etc/s6-overlay/s6-rc.d/
 
 EXPOSE 6817/tcp 6818/tcp 6819/tcp 6820/tcp
 
