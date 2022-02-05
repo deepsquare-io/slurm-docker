@@ -6,7 +6,6 @@ services:
     pull_policy: never
     privileged: true
     network_mode: host
-    command: ['slurmctld']
     build:
       context: ./slurm
       dockerfile: Dockerfile
@@ -14,6 +13,8 @@ services:
     container_name: slurmctl
     dns:
       - 10.10.2.10
+    environment:
+      - SLURM_TYPE=slurmctld
     # ports:
     #   - 6817:6817
     volumes:
