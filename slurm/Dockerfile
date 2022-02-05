@@ -16,7 +16,8 @@ RUN update-ca-trust \
   && dnf clean all
 
 # Munge & Slurm configurations
-RUN mkdir -p /run/munge && chown munge: /run/munge \
+RUN mkdir -p /run/munge && chown munge:munge /run/munge \
+  && mkdir -p /var/run/munge && chown munge:munge /var/run/munge \
   && mkdir -p /var/{spool,run}/{slurm,slurmctl} \
   && mkdir -p /var/log/slurm/ \
   && mkdir -p /root/.ssh \
