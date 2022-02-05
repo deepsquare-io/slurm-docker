@@ -17,10 +17,13 @@ RUN update-ca-trust \
   pdsh \
   sudo \
   beeond \
+  jq \
+  openssh-clients \
   && dnf clean all
 
 # Munge & Slurm configurations
-RUN mkdir -p /run/munge && chown munge:munge /run/munge \
+RUN echo "slurm	ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
+  && mkdir -p /run/munge && chown munge:munge /run/munge \
   && mkdir -p /var/run/munge && chown munge:munge /var/run/munge \
   && mkdir -p /var/{spool,run}/{slurm,slurmctl} \
   && mkdir -p /var/log/slurm/ \

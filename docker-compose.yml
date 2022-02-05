@@ -13,10 +13,6 @@ services:
     container_name: slurmctl
     dns:
       - 10.10.2.10
-    environment:
-      - SLURM_TYPE=slurmctld
-    # ports:
-    #   - 6817:6817
     volumes:
       - /home/user/nfs-mount/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
       - /home/user/nfs-mount/sssd.rocky.conf:/etc/sssd/sssd.conf:ro
@@ -25,8 +21,6 @@ services:
       - /home/user/nfs-mount/site-specific/sion/slurmctl:/etc/slurm:ro
       - /home/user/nfs-mount/site-specific/sion/slurmctl-keys/id_rsa:/root/.ssh/id_rsa:ro
       - /home/user/nfs-mount/site-specific/sion/slurmctl-keys/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
-      # This will create a memory leak (obviously). Please, let docker handle the logs.
-      #- ./logs:/var/log/slurm
       - ./tmp:/tmp
       - ./beeond-status:/var/log/beeond
       - ./state:/var/spool/slurmctl

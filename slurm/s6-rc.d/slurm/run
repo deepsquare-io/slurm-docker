@@ -1,22 +1,10 @@
-#!/command/with-contenv sh
-if [ "$SLURM_TYPE" = "slurmdbd" ]
-then
-/usr/sbin/slurmdbd -D
-fi
-
-if [ "$SLURM_TYPE" = "slurmctld" ]
-then
+#!/bin/bash
+set -ex
 cp /secrets/jwt_hs256.key /var/spool/slurmctl/jwt_hs256.key || echo "Copy file has failed"
+
+while ! id slurm
+do
+  sleep 1
+done
 chown -R slurm: /var/spool/{slurmctl,slurm} /var/run/{slurmctl,slurm}
-/usr/sbin/slurmctld -D
-fi
-
-if [ "$SLURM_TYPE" = "slurmd" ]
-then
-/usr/sbin/slurmd -D
-fi
-
-if [ "$SLURM_TYPE" = "slurmrestd" ]
-then
-env SLURM_JWT=daemon /usr/sbin/slurmrestd -vvvvv 0.0.0.0:6820
-fi
+s6-setuidgid slurm /usr/sbin/slurmctld -D
