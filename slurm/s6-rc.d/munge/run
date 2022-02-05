@@ -1,4 +1,4 @@
 #!/bin/sh
 cp /secrets/munge.key /etc/munge/munge.key || echo "Copy file has failed"
 chown munge: /etc/munge/munge.key
-munged -F
+/usr/sbin/munged -F
