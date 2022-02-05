@@ -22,14 +22,14 @@ RUN update-ca-trust \
   && dnf clean all
 
 # Munge & Slurm configurations
-RUN echo -e "slurm	ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
+RUN echo "slurm	ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
   && mkdir -p /run/munge && chown munge:munge /run/munge \
   && mkdir -p /var/run/munge && chown munge:munge /var/run/munge \
   && mkdir -p /var/{spool,run}/{slurm,slurmctl} \
   && mkdir -p /var/log/slurm/ \
   && mkdir -p /root/.ssh \
   && chmod 700 /root/.ssh \
-  && echo "Host *\n\
+  && echo -e "Host *\n\
   StrictHostKeyChecking no\n" \
   > /root/.ssh/config
 ENV SLURM_CONF=/etc/slurm/slurm.conf
