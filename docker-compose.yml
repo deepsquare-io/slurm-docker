@@ -18,7 +18,7 @@ services:
     #   - 6817:6817
     volumes:
       - /home/user/nfs-mount/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
-      - /home/user/nfs-mount/sssd.conf:/etc/sssd/sssd.conf:ro
+      - /home/user/nfs-mount/sssd.rocky.conf:/etc/sssd/sssd.conf:ro
       - /home/user/nfs-mount/munge.key:/secrets/munge.key:ro
       - /home/user/nfs-mount/slurmctl/jwt_hs256.key:/secrets/jwt_hs256.key:ro
       - /home/user/nfs-mount/site-specific/sion/slurmctl:/etc/slurm:ro

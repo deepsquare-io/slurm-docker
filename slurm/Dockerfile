@@ -11,10 +11,11 @@ RUN update-ca-trust \
   slurm \
   slurm-slurmctld \
   jobcomp-report \
+  sssd \
   && dnf clean all
 
 # Munge & Slurm configurations
-RUN mkdir /run/munge && chown munge: /run/munge
+RUN mkdir -p /run/munge && chown munge: /run/munge
 ENV SLURM_CONF=/etc/slurm/slurm.conf
 
 EXPOSE 6817/tcp 6818/tcp 6819/tcp 6820/tcp

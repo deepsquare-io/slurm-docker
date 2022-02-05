@@ -9,7 +9,7 @@ su -s /bin/bash -c munged munge
 
 # SSSD
 rm -f /var/run/sssd.pid
-/etc/init.d/sssd restart
+/usr/bin/sssd
 
 while ! id slurm
 do
