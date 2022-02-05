@@ -26,6 +26,8 @@ services:
       - /home/user/nfs-mount/site-specific/sion/slurmctl-keys/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
       # This will create a memory leak (obviously). Please, let docker handle the logs.
       #- ./logs:/var/log/slurm
+      - ./tmp:/tmp
+      - ./beeond-status:/var/log/beeond
       - ./state:/var/spool/slurmctl
       - ./jobs-costs:/opt/jobs-costs
       - ./bin/fakemail:/usr/bin/fakemail:ro
