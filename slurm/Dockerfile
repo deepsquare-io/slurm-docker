@@ -25,7 +25,8 @@ ENV SLURM_CONF=/etc/slurm/slurm.conf
 
 ENV S6_OVERLAY_VERSION=3.0.0.2
 
-COPY s6-rc.d/munge s6-rc.d/sss /etc/s6-overlay/s6-rc.d/
+COPY s6-rc.d/munge/ /etc/s6-overlay/s6-rc.d/munge/
+COPY s6-rc.d/sss/ /etc/s6-overlay/s6-rc.d/sss/
 COPY s6-rc.d/user/contents.d/munge s6-rc.d/user/contents.d/sss /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz -o /tmp/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz \
@@ -49,7 +50,8 @@ RUN groupadd -r api && useradd --no-log-init -r -g api api
 
 EXPOSE 6818/tcp 6820/tcp
 
-COPY s6-rc.d/slurm s6-rc.d/slurmrest /etc/s6-overlay/s6-rc.d/
+COPY s6-rc.d/slurm/ /etc/s6-overlay/s6-rc.d/slurm/
+COPY s6-rc.d/slurmrest/ /etc/s6-overlay/s6-rc.d/slurmrest/
 COPY s6-rc.d/user/contents.d/slurm s6-rc.d/user/contents.d/slurmrest /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 ENTRYPOINT ["/init"]
@@ -62,7 +64,7 @@ RUN dnf install -y \
   slurm-slurmctld \
   && dnf clean all
 
-COPY s6-rc.d/slurmctl /etc/s6-overlay/s6-rc.d/
+COPY s6-rc.d/slurmctl/ /etc/s6-overlay/s6-rc.d/slurmctl/
 COPY s6-rc.d/user/contents.d/slurmctl /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 EXPOSE 6817/tcp
@@ -77,7 +79,7 @@ RUN dnf install -y \
   slurm-slurmdbd \
   && dnf clean all
 
-COPY s6-rc.d/slurmdb /etc/s6-overlay/s6-rc.d/
+COPY s6-rc.d/slurmdb/ /etc/s6-overlay/s6-rc.d/slurmdb/
 COPY s6-rc.d/user/contents.d/slurmdb /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 EXPOSE 6819/tcp
