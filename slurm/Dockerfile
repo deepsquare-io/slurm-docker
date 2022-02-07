@@ -70,7 +70,7 @@ EXPOSE 6817/tcp
 ENTRYPOINT ["/init"]
 
 # -------------------------------------------------------
-FROM slurm-base AS slurm-slurmdb
+FROM slurm-base AS slurm-slurmdbd
 # -------------------------------------------------------
 
 RUN dnf install -y \
