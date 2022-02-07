@@ -87,7 +87,9 @@ services:
       - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
       - ./conf:/etc/slurm:ro
       - ./logs/slurm:/var/log/slurm
-    cpus: 0.25
-    mem_limit: 256M
+    cpus: 0.50
+    mem_reservation: 512M
+    mem_limit: 512M
+    memswap_limit: 512M
     # networks:
     #   - slurmctl-net
