@@ -6,5 +6,5 @@ while ! id slurm
 do
   sleep 1
 done
-chown -R slurm: /var/spool/slurm /var/run/slurm
+chown -R slurm: /var/spool/slurmd /var/run/slurmd
 s6-applyuidgid -u "$(id slurm -u)" -g "$(id slurm -g)" /usr/sbin/slurmd -D
