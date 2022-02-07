@@ -19,8 +19,8 @@ RUN update-ca-trust \
 # Munge & Slurm configurations
 RUN mkdir -p /run/munge && chown munge:munge /run/munge \
   && mkdir -p /var/run/munge && chown munge:munge /var/run/munge \
-  && mkdir -p /var/{spool,run}/{slurm, slurmctl, slurmdb} \
-  && mkdir -p /var/log/{slurm, slurmctl, slurmdb}/
+  && mkdir -p /var/{spool,run}/{slurm,slurmctl,slurmdb}/ \
+  && mkdir -p /var/log/{slurm,slurmctl,slurmdb}/
 ENV SLURM_CONF=/etc/slurm/slurm.conf
 
 ENV S6_OVERLAY_VERSION=3.0.0.2
