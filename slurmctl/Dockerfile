@@ -24,6 +24,7 @@ ENV SLURM_CONF=/etc/slurm/slurm.conf
 
 EXPOSE 6817/tcp
 
+ENV S6_OVERLAY_VERSION=3.0.0.2
 COPY s6-rc.d/ /etc/s6-overlay/s6-rc.d/
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz /tmp
 RUN tar -C / -Jxpf /tmp/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz
