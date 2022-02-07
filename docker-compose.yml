@@ -22,7 +22,7 @@ services:
     pull_policy: never
     network_mode: host
     build:
-      context: ./slurmdb
+      context: ./slurm
       dockerfile: Dockerfile
       target: slurm-slurmdbd
     hostname: slurmdb
