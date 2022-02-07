@@ -2,4 +2,4 @@
 set -ex
 
 export SLURM_JWT=daemon
-s6-applyuidgid -u api -g api /usr/sbin/slurmrestd 127.0.0.1:6820
+s6-applyuidgid -u "$(id api -u)" -g "$(id api -g)" /usr/sbin/slurmrestd 127.0.0.1:6820
