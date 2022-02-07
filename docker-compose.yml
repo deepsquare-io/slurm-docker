@@ -24,6 +24,7 @@ services:
     build:
       context: ./slurmdb
       dockerfile: Dockerfile
+      target: slurm-slurmdbd
     hostname: slurmdb
     container_name: slurmdb
     # ports:
@@ -43,8 +44,9 @@ services:
     privileged: true
     network_mode: host
     build:
-      context: ./slurmctl
+      context: ./slurm
       dockerfile: Dockerfile
+      target: slurm-slurmctld
     depends_on:
       - "slurmdb"
     hostname: slurmctl
@@ -69,7 +71,7 @@ services:
     build:
       context: ./slurm
       dockerfile: Dockerfile
-    command: ["slurmd"]
+      target: slurm-slurmd
     depends_on:
       - "slurmctl"
     hostname: slurm-0
