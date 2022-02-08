@@ -35,6 +35,10 @@ services:
       - ./logs/slurm:/var/log/slurm
       - /opt/cvmfs:/opt/cvmfs
       - /opt/gentoo:/opt/gentoo
+      - ldap-users:/home/ldap-users
+      - jobs-logs:/opt/jobs-logs
+      - images:/opt/images
+      - experiments:/opt/experiments
 
 volumes:
   ldap-users:
