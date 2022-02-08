@@ -1,4 +1,10 @@
-**/certs/*
-**/secrets/*
-**/logs
+
 !**/.gitkeep
+!secrets/.gitkeep
+!secrets/munge/.gitkeep
+!secrets/slurm/.gitkeep
+!secrets/sssd/.gitkeep
+!secrets/ssh/.gitkeep
+
+secrets/*
+**/logs

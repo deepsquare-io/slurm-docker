@@ -1,6 +1,6 @@
 #!/bin/sh
 set -ex
 
-cp /secrets/munge.key /etc/munge/munge.key || echo "Copy file has failed"
-chown munge: /etc/munge/munge.key
+cp /secrets/munge/munge.key /etc/munge/munge.key
+chown -R munge: /etc/munge /var/lib/munge /var/log/munge /var/run/munge
 s6-setuidgid munge /usr/sbin/munged -F

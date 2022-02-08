@@ -25,22 +25,16 @@ services:
     hostname: slurm-0
     container_name: slurm-0
     volumes:
-      - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
-      - ./secrets/sssd.conf:/etc/sssd/sssd.conf:ro
-      - ./secrets/munge.key:/secrets/munge.key:ro
-      - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
+      - /etc/ssl/certs:/etc/ssl/certs:ro
+      - ./secrets/sssd:/secrets/sssd:ro
+      - ./secrets/munge:/secrets/munge:ro
+      - ./secrets/slurm:/secrets/slurm:ro
       - ./conf/slurm.conf:/etc/slurm/slurm.conf:ro
       - ./conf/sshd_config:/etc/ssh/sshd_config:ro
-      - ./secrets/hostkeys/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
-      - ./secrets/hostkeys/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key
-      - ./secrets/hostkeys/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+      - ./secrets/ssh:/secrets/ssh:ro
       - ./logs/slurm:/var/log/slurm
       - /opt/cvmfs:/opt/cvmfs
       - /opt/gentoo:/opt/gentoo
-    # cpus: 0.50
-    # mem_reservation: 512M
-    # mem_limit: 512M
-    # memswap_limit: 512M
 
 volumes:
   ldap-users:

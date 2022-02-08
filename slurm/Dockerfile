@@ -29,6 +29,8 @@ COPY s6-rc.d/munge/ /etc/s6-overlay/s6-rc.d/munge/
 COPY s6-rc.d/sss/ /etc/s6-overlay/s6-rc.d/sss/
 COPY s6-rc.d/user/contents.d/munge s6-rc.d/user/contents.d/sss /etc/s6-overlay/s6-rc.d/user/contents.d/
 
+VOLUME [ "/secrets/munge", "/secrets/sssd" ]
+
 RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz -o /tmp/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz \
   && tar -C / -Jxpf /tmp/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz \
   && curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64-${S6_OVERLAY_VERSION}.tar.xz -o /tmp/s6-overlay-x86_64-${S6_OVERLAY_VERSION}.tar.xz \
@@ -60,11 +62,13 @@ RUN dnf install -y \
   vim \
   && dnf clean all
 
-EXPOSE 6818/tcp 6820/tcp
-
 COPY s6-rc.d/slurm/ /etc/s6-overlay/s6-rc.d/slurm/
 COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
 COPY s6-rc.d/user/contents.d/slurm s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
+
+EXPOSE 22/tcp 6818/tcp
+
+VOLUME [ "/secrets/ssh", "/secrets/slurm" ]
 
 ENTRYPOINT ["/init"]
 
@@ -80,5 +84,7 @@ COPY s6-rc.d/slurmctl/ /etc/s6-overlay/s6-rc.d/slurmctl/
 COPY s6-rc.d/user/contents.d/slurmctl /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 EXPOSE 6817/tcp
+
+VOLUME [ "/secrets/slurm" ]
 
 ENTRYPOINT ["/init"]
