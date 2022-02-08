@@ -42,17 +42,29 @@ FROM slurm-base AS slurm-slurmd
 # Install dependencies
 RUN dnf install -y \
   slurm-slurmd \
-  slurm-slurmrestd \
+  zsh \
+  spank-report \
+  nvslurm-plugin-pyxis \
+  slurm-contribs \
+  slurm-libpmi \
+  slurm-pam_slurm \
+  s3cmd \
+  screen \
+  tmux \
+  oddjob \
+  oddjob-mkhomedir \
+  git \
+  openssh-server \
+  openssh-clients \
+  wget \
+  vim \
   && dnf clean all
-
-# API user
-RUN groupadd -r api && useradd --no-log-init -r -g api api
 
 EXPOSE 6818/tcp 6820/tcp
 
 COPY s6-rc.d/slurm/ /etc/s6-overlay/s6-rc.d/slurm/
-COPY s6-rc.d/slurmrest/ /etc/s6-overlay/s6-rc.d/slurmrest/
-COPY s6-rc.d/user/contents.d/slurm s6-rc.d/user/contents.d/slurmrest /etc/s6-overlay/s6-rc.d/user/contents.d/
+COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
+COPY s6-rc.d/user/contents.d/slurm s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 ENTRYPOINT ["/init"]
 
@@ -68,20 +80,5 @@ COPY s6-rc.d/slurmctl/ /etc/s6-overlay/s6-rc.d/slurmctl/
 COPY s6-rc.d/user/contents.d/slurmctl /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 EXPOSE 6817/tcp
-
-ENTRYPOINT ["/init"]
-
-# -------------------------------------------------------
-FROM slurm-base AS slurm-slurmdbd
-# -------------------------------------------------------
-
-RUN dnf install -y \
-  slurm-slurmdbd \
-  && dnf clean all
-
-COPY s6-rc.d/slurmdb/ /etc/s6-overlay/s6-rc.d/slurmdb/
-COPY s6-rc.d/user/contents.d/slurmdb /etc/s6-overlay/s6-rc.d/user/contents.d/
-
-EXPOSE 6819/tcp
 
 ENTRYPOINT ["/init"]

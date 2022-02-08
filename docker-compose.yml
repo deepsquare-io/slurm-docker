@@ -1,67 +1,17 @@
-version: '2.4'
-services:
-  nginx:
-    image: nginx:alpine
-    restart: always
-    network_mode: host
-    depends_on:
-      - "slurm-0"
-    volumes:
-      - ./logs/nginx:/var/log/nginx
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/certs/slurmrest.csquare.gcloud.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.crt
-      - ./nginx/certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
-    # ports:
-    #   - 443:443
-    # networks:
-    #   - slurmctl-net
+version: '3.9'
 
-  slurmdb:
-    image: slurmdb
-    restart: always
-    pull_policy: never
-    network_mode: host
-    build:
-      context: ./slurm
-      dockerfile: Dockerfile
-      target: slurm-slurmdbd
-    hostname: slurmdb
-    container_name: slurmdb
-    # ports:
-    #   - 6819:6819
-    volumes:
-      - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
-      - ./secrets/sssd.conf:/etc/sssd/sssd.conf:ro
-      - ./secrets/munge.key:/secrets/munge.key:ro
-      - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
-      - ./conf:/etc/slurm:ro
-      - ./logs/slurmdb:/var/log/slurm
-      - /mnt/nfs/archive:/archive
-  slurmctl:
-    image: slurmctl
-    restart: always
-    pull_policy: never
-    privileged: true
-    network_mode: host
-    build:
-      context: ./slurm
-      dockerfile: Dockerfile
-      target: slurm-slurmctld
-    depends_on:
-      - "slurmdb"
-    hostname: slurmctl
-    container_name: slurm-controller
-    # ports:
-    #   - 6817:6817
-    volumes:
-      - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
-      - ./secrets/sssd.conf:/etc/sssd/sssd.conf:ro
-      - ./secrets/munge.key:/secrets/munge.key:ro
-      - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
-      - ./conf:/etc/slurm:ro
-      - ./logs/slurmctl:/var/log/slurm
-    # networks:
-    #   - slurmctl-net
+services:
+  # nginx:
+  #   image: nginx:alpine
+  #   restart: always
+  #   network_mode: host
+  #   depends_on:
+  #     - "slurm-0"
+  #   volumes:
+  #     - ./logs/nginx:/var/log/nginx
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  #     - ./nginx/certs/slurmrest.csquare.gcloud.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.crt
+  #     - ./nginx/certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
 
   slurm-0:
     image: slurm
@@ -72,24 +22,44 @@ services:
       context: ./slurm
       dockerfile: Dockerfile
       target: slurm-slurmd
-    depends_on:
-      - "slurmctl"
     hostname: slurm-0
     container_name: slurm-0
-    privileged: true  # Only used for REST Api
-    # expose:
-    #   - "6820"
-    #   - "6818"
     volumes:
       - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
       - ./secrets/sssd.conf:/etc/sssd/sssd.conf:ro
       - ./secrets/munge.key:/secrets/munge.key:ro
       - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
-      - ./conf:/etc/slurm:ro
+      - ./conf/slurm.conf:/etc/slurm/slurm.conf:ro
+      - ./conf/sshd_config:/etc/ssh/sshd_config:ro
+      - ./secrets/hostkeys/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+      - ./secrets/hostkeys/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key
+      - ./secrets/hostkeys/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
       - ./logs/slurm:/var/log/slurm
-    cpus: 0.50
-    mem_reservation: 512M
-    mem_limit: 512M
-    memswap_limit: 512M
-    # networks:
-    #   - slurmctl-net
+      - /opt/cvmfs:/opt/cvmfs
+      - /opt/gentoo:/opt/gentoo
+    # cpus: 0.50
+    # mem_reservation: 512M
+    # mem_limit: 512M
+    # memswap_limit: 512M
+
+volumes:
+  ldap-users:
+    driver_opts:
+      type: "nfs"
+      o: "nfsvers=3,addr=10.10.2.11,nolock,soft,rw"
+      device: ":/mnt/pool1/ldap-users"
+  jobs-logs:
+    driver_opts:
+      type: "nfs"
+      o: "nfsvers=3,addr=10.10.2.11,nolock,soft,rw"
+      device: ":/mnt/pool1/compute-nodes/jobs-logs"
+  images:
+    driver_opts:
+      type: "nfs"
+      o: "nfsvers=3,addr=10.10.2.11,nolock,soft,rw"
+      device: ":/mnt/pool1/compute-nodes/images"
+  experiments:
+    driver_opts:
+      type: "nfs"
+      o: "nfsvers=3,addr=10.10.2.11,nolock,soft,rw"
+      device: ":/mnt/pool1/compute-nodes/experiments"
