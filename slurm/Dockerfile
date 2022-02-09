@@ -46,7 +46,7 @@ FROM slurm-base AS slurm-head
 
 # Install dependencies
 RUN dnf config-manager --set-enabled powertools \
-  dnf install -y \
+  && dnf install -y \
   zsh \
   nvslurm-plugin-pyxis \
   slurm-contribs \
