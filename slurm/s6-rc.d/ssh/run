@@ -8,4 +8,6 @@ for f in /etc/ssh/ssh_host_*_key; do
 	ssh-keygen -lf "$f"
 done
 
+rm -f /run/nologin
+
 /usr/sbin/sshd -D
