@@ -32,7 +32,7 @@ services:
       - ./secrets/sssd:/secrets/sssd:ro
       - ./secrets/munge:/secrets/munge:ro
       - ./secrets/slurm:/secrets/slurm:ro
-      - ./conf/slurm.conf:/etc/slurm/slurm.conf:ro
+      - ./conf/slurm:/etc/slurm:ro
       - ./conf/sshd_config:/etc/ssh/sshd_config:ro
       - ./secrets/ssh:/secrets/ssh:ro
       - ./logs/slurm:/var/log/slurm
