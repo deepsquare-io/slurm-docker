@@ -13,17 +13,20 @@ services:
   #     - ./nginx/certs/slurmrest.csquare.gcloud.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.crt
   #     - ./nginx/certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
 
-  slurm-0:
+  hn0:
     image: slurm
-    restart: always
     pull_policy: never
-    network_mode: host
     build:
       context: ./slurm
       dockerfile: Dockerfile
-      target: slurm-slurmd
-    hostname: slurm-0
-    container_name: slurm-0
+      target: slurm-head
+    hostname: hn0
+    container_name: hn0
+    ports:
+      - 10.5.0.5:22:22
+    networks:
+      vpc:
+        ipv4_address: 10.5.0.5
     volumes:
       - /etc/ssl/certs:/etc/ssl/certs:ro
       - ./secrets/sssd:/secrets/sssd:ro
@@ -39,6 +42,14 @@ services:
       - jobs-logs:/opt/jobs-logs
       - images:/opt/images
       - experiments:/opt/experiments
+
+networks:
+  vpc:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.2.0/24
+          gateway: 10.10.2.1
 
 volumes:
   ldap-users:

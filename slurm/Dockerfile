@@ -38,14 +38,12 @@ RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v
   && rm -rf /tmp/*
 
 # ----------------------------------------------------
-FROM slurm-base AS slurm-slurmd
+FROM slurm-base AS slurm-head
 # ----------------------------------------------------
 
 # Install dependencies
 RUN dnf install -y \
-  slurm-slurmd \
   zsh \
-  spank-report \
   nvslurm-plugin-pyxis \
   slurm-contribs \
   slurm-libpmi \
@@ -62,11 +60,10 @@ RUN dnf install -y \
   vim \
   && dnf clean all
 
-COPY s6-rc.d/slurm/ /etc/s6-overlay/s6-rc.d/slurm/
 COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
 COPY s6-rc.d/user/contents.d/slurm s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
 
-EXPOSE 22/tcp 6818/tcp
+EXPOSE 22/tcp
 
 VOLUME [ "/secrets/ssh", "/secrets/slurm" ]
 
