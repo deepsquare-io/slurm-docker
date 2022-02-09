@@ -52,6 +52,9 @@ RUN dnf install -y \
   slurm-libpmi \
   slurm-pam_slurm \
   s3cmd \
+  pmix2 \
+  pmix3 \
+  pmix4 \
   screen \
   tmux \
   oddjob \
