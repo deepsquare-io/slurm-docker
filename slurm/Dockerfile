@@ -14,6 +14,7 @@ RUN update-ca-trust \
   slurm \
   sssd \
   xz \
+  authselect \
   && dnf clean all
 
 # Munge & Slurm configurations
