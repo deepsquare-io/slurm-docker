@@ -61,7 +61,7 @@ RUN dnf install -y \
   && dnf clean all
 
 COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
-COPY s6-rc.d/user/contents.d/slurm s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
+COPY s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 EXPOSE 22/tcp
 
