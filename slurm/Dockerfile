@@ -25,6 +25,10 @@ ENV SLURM_CONF=/etc/slurm/slurm.conf
 
 ENV S6_OVERLAY_VERSION=3.0.0.2
 
+RUN authselect select sssd --force && \
+  sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t027|g' /etc/login.defs && \
+  authselect enable-feature with-sudo
+
 COPY s6-rc.d/munge/ /etc/s6-overlay/s6-rc.d/munge/
 COPY s6-rc.d/sss/ /etc/s6-overlay/s6-rc.d/sss/
 COPY s6-rc.d/user/contents.d/munge s6-rc.d/user/contents.d/sss /etc/s6-overlay/s6-rc.d/user/contents.d/
@@ -59,6 +63,8 @@ RUN dnf install -y \
   wget \
   vim \
   && dnf clean all
+
+RUN authselect enable-feature with-mkhomedir
 
 COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
 COPY s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
