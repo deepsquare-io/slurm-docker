@@ -45,7 +45,8 @@ FROM slurm-base AS slurm-head
 # ----------------------------------------------------
 
 # Install dependencies
-RUN dnf install -y \
+RUN dnf config-manager --set-enabled powertools \
+  dnf install -y \
   zsh \
   nvslurm-plugin-pyxis \
   slurm-contribs \
@@ -55,6 +56,9 @@ RUN dnf install -y \
   pmix2 \
   pmix3 \
   pmix4 \
+  hwloc \
+  hwloc-libs \
+  hwloc-devel \
   screen \
   tmux \
   oddjob \
