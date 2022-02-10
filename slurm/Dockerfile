@@ -114,6 +114,6 @@ COPY s6-rc.d/user/contents.d/slurmctl /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 EXPOSE 6817/tcp
 
-VOLUME [ "/secrets/slurm" ]
+VOLUME [ "/secrets/slurm", "/var/spool/slurmctl" ]
 
 ENTRYPOINT ["/init"]
