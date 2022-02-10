@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   slurmctl:
-    image: slurm-base
+    image: slurm-slurmctl
     restart: always
     pull_policy: never
     privileged: true
@@ -11,18 +11,16 @@ services:
       dockerfile: Dockerfile
     hostname: slurmctl
     container_name: slurmctl
-    dns:
-      - 10.10.2.10
     volumes:
-      - /home/user/nfs-mount/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
-      - /home/user/nfs-mount/sssd.rocky.conf:/etc/sssd/sssd.conf:ro
-      - /home/user/nfs-mount/munge.key:/secrets/munge.key:ro
-      - /home/user/nfs-mount/slurmctl/jwt_hs256.key:/secrets/jwt_hs256.key:ro
-      - /home/user/nfs-mount/site-specific/sion/slurmctl:/etc/slurm:ro
-      - /home/user/nfs-mount/site-specific/sion/slurmctl-keys/id_rsa:/root/.ssh/id_rsa:ro
-      - /home/user/nfs-mount/site-specific/sion/slurmctl-keys/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
+      - /etc/ssl/certs:/etc/ssl/certs:ro
+      - ./conf/slurm:/etc/slurm:ro
+      - ./secrets/sssd:/secrets/sssd:ro
+      - ./secrets/munge:/secrets/munge:ro
+      - ./secrets/slurm:/secrets/slurm:ro
+      - ./secrets/ssh:/root/.ssh:ro
+      #- /home/user/nfs-mount/site-specific/sion/slurmctl-keys/id_rsa:/root/.ssh/id_rsa:ro
+      #- /home/user/nfs-mount/site-specific/sion/slurmctl-keys/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
       - ./tmp:/tmp
       - ./beeond-status:/var/log/beeond
       - ./state:/var/spool/slurmctl
-      - ./jobs-costs:/opt/jobs-costs
       - ./bin/fakemail:/usr/bin/fakemail:ro
