@@ -1,7 +1,7 @@
 #!/bin/sh
 set -ex
 
-cp /secrets/ssh/ssh_host_*_key /etc/ssh/
+cp /secrets/sshd/ssh_host_*_key /etc/ssh/
 chmod 600 /etc/ssh/ssh_host_*_key
 chown root:root /etc/ssh/ssh_host_*_key
 for f in /etc/ssh/ssh_host_*_key; do
