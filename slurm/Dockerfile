@@ -89,9 +89,25 @@ ENTRYPOINT ["/init"]
 FROM slurm-base AS slurm-slurmctld
 # -------------------------------------------------------
 
-RUN dnf install -y \
+RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.5/dists/beegfs-rocky.repo \
+  && dnf install -y \
   slurm-slurmctld \
+  jobcomp-report \
+  pdsh \
+  sudo \
+  beeond \
+  jq \
+  openssh-clients \
   && dnf clean all
+
+# Beeond SSH configuration
+RUN echo "slurm	ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
+  && mkdir -p /root/.ssh \
+  && chmod 700 /root/.ssh \
+  && echo -e "Host *\n\
+  StrictHostKeyChecking no\n" \
+  > /root/.ssh/config \
+  && chmod 600 /root/.ssh/config
 
 COPY s6-rc.d/slurmctl/ /etc/s6-overlay/s6-rc.d/slurmctl/
 COPY s6-rc.d/user/contents.d/slurmctl /etc/s6-overlay/s6-rc.d/user/contents.d/
