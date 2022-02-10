@@ -73,7 +73,8 @@ RUN dnf config-manager --set-enabled powertools \
 
 RUN authselect enable-feature with-mkhomedir && \
   sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t027|g' /etc/login.defs && \
-  authselect enable-feature with-sudo
+  authselect enable-feature with-sudo && \
+  setcap cap_net_admin,cap_net_raw+p /usr/bin/ping
 
 COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
 COPY s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
