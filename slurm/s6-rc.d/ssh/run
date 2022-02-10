@@ -1,0 +1,13 @@
+#!/bin/sh
+set -ex
+
+cp /secrets/ssh/ssh_host_*_key /etc/ssh/
+chmod 600 /etc/ssh/ssh_host_*_key
+chown root:root /etc/ssh/ssh_host_*_key
+for f in /etc/ssh/ssh_host_*_key; do
+	ssh-keygen -lf "$f"
+done
+
+rm -f /run/nologin
+
+/usr/sbin/sshd -D
