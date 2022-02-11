@@ -81,7 +81,7 @@ COPY s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 EXPOSE 22/tcp
 
-VOLUME [ "/secrets/sshd", "/secrets/slurm" ]
+VOLUME [ "/secrets/sshd" ]
 
 ENTRYPOINT ["/init"]
 
