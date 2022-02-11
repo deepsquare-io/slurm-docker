@@ -90,9 +90,20 @@ FROM slurm-base AS slurm-slurmctld
 # -------------------------------------------------------
 
 RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.5/dists/beegfs-rocky.repo \
+  && dnf config-manager --set-enabled powertools \
   && dnf install -y \
   slurm-slurmctld \
+  nvslurm-plugin-pyxis \
+  slurm-contribs \
+  slurm-libpmi \
+  slurm-pam_slurm \
   jobcomp-report \
+  pmix2 \
+  pmix3 \
+  pmix4 \
+  hwloc \
+  hwloc-libs \
+  hwloc-devel \
   pdsh \
   sudo \
   beeond \
