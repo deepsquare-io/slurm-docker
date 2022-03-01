@@ -72,9 +72,9 @@ RUN dnf config-manager --set-enabled powertools \
   procps \
   && dnf clean all
 
-RUN sed -i '/^session.*optional.*pam_sss.so$/a session     optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077' /etc/pam.d/system-auth \
-  && sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t077|g' /etc/login.defs \
+RUN sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t077|g' /etc/login.defs \
   && authselect enable-feature with-sudo \
+  && sed -i '/^session.*optional.*pam_sss.so$/a session     optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077' /etc/pam.d/system-auth \
   && setcap cap_net_admin,cap_net_raw+p /usr/bin/ping
 
 COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
