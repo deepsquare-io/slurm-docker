@@ -67,6 +67,7 @@ RUN dnf config-manager --set-enabled powertools \
   git \
   openssh-server \
   openssh-clients \
+  openldap-clients \
   wget \
   vim \
   sudo \
