@@ -132,3 +132,21 @@ EXPOSE 6817/tcp
 VOLUME [ "/secrets/slurm", "/var/spool/slurmctl" ]
 
 ENTRYPOINT ["/init"]
+
+# -------------------------------------------------------
+FROM slurm-base AS slurm-slurmrestd
+# -------------------------------------------------------
+
+RUN dnf install -y \
+  slurm-slurmrestd \
+  && dnf clean all
+
+# API user
+RUN groupadd -r api && useradd --no-log-init -r -g api api
+
+COPY s6-rc.d/slurmrest/ /etc/s6-overlay/s6-rc.d/slurmrest/
+COPY s6-rc.d/user/contents.d/slurmrest /etc/s6-overlay/s6-rc.d/user/contents.d/
+
+EXPOSE 6820/tcp
+
+ENTRYPOINT ["/init"]
