@@ -30,8 +30,7 @@ RUN authselect select sssd --force
 
 COPY s6-rc.d/munge/ /etc/s6-overlay/s6-rc.d/munge/
 COPY s6-rc.d/sss/ /etc/s6-overlay/s6-rc.d/sss/
-COPY s6-rc.d/oddjob/ /etc/s6-overlay/s6-rc.d/oddjob/
-COPY s6-rc.d/user/contents.d/oddjob s6-rc.d/user/contents.d/munge s6-rc.d/user/contents.d/sss /etc/s6-overlay/s6-rc.d/user/contents.d/
+COPY s6-rc.d/user/contents.d/munge s6-rc.d/user/contents.d/sss /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 VOLUME [ "/secrets/munge", "/secrets/sssd" ]
 
@@ -62,8 +61,6 @@ RUN dnf config-manager --set-enabled powertools \
   hwloc-devel \
   screen \
   tmux \
-  oddjob \
-  oddjob-mkhomedir \
   git \
   openssh-server \
   openssh-clients \
@@ -75,8 +72,8 @@ RUN dnf config-manager --set-enabled powertools \
   procps \
   && dnf clean all
 
-RUN authselect enable-feature with-mkhomedir && \
-  sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t027|g' /etc/login.defs && \
+RUN sed -i '/^session.*optional.*pam_sss.so$/a session     optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077' /etc/pam.d/system-auth \
+  sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t077|g' /etc/login.defs && \
   authselect enable-feature with-sudo && \
   setcap cap_net_admin,cap_net_raw+p /usr/bin/ping
 

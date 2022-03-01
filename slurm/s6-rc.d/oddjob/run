@@ -1,5 +1,0 @@
-#!/bin/sh
-set -ex
-
-# -d no daemon, -n debug
-/sbin/oddjobd -d -n
