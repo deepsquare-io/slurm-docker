@@ -30,7 +30,8 @@ RUN authselect select sssd --force
 
 COPY s6-rc.d/munge/ /etc/s6-overlay/s6-rc.d/munge/
 COPY s6-rc.d/sss/ /etc/s6-overlay/s6-rc.d/sss/
-COPY s6-rc.d/user/contents.d/munge s6-rc.d/user/contents.d/sss /etc/s6-overlay/s6-rc.d/user/contents.d/
+COPY s6-rc.d/oddjob/ /etc/s6-overlay/s6-rc.d/oddjob/
+COPY s6-rc.d/user/contents.d/oddjob s6-rc.d/user/contents.d/munge s6-rc.d/user/contents.d/sss /etc/s6-overlay/s6-rc.d/user/contents.d/
 
 VOLUME [ "/secrets/munge", "/secrets/sssd" ]
 
@@ -69,6 +70,8 @@ RUN dnf config-manager --set-enabled powertools \
   wget \
   vim \
   sudo \
+  htop \
+  procps \
   && dnf clean all
 
 RUN authselect enable-feature with-mkhomedir && \

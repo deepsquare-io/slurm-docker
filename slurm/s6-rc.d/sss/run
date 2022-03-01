@@ -1,7 +1,5 @@
 #!/bin/sh
 set -ex
 
-cp /secrets/sssd/sssd.conf /etc/sssd/sssd.conf
-chmod 400 /etc/sssd/sssd.conf
-chown root:root /etc/sssd/sssd.conf
-/usr/sbin/sssd -i
+# -d no daemon, -n debug
+/usr/sbin/sssd -d -n
