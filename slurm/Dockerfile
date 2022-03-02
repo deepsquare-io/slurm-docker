@@ -52,6 +52,7 @@ RUN dnf config-manager --set-enabled powertools \
   slurm-contribs \
   slurm-libpmi \
   slurm-pam_slurm \
+  pam_mkslurmuser \
   s3cmd \
   pmix2 \
   pmix3 \

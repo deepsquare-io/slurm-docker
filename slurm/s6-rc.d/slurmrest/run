@@ -3,8 +3,7 @@ set -ex
 
 cp /secrets/slurm/jwt_hs256.key /etc/slurm/jwt_hs256.key
 
-while ! id slurm
-do
+while ! id slurm; do
   sleep 1
 done
 chown slurm:slurm /etc/slurm/jwt_hs256.key
