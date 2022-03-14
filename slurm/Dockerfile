@@ -79,7 +79,8 @@ RUN sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t077|g' /etc/login.defs \
   && echo 'session     optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077' >> /etc/pam.d/system-auth \
   && echo 'session     optional      pam_mkslurmuser.so' >> /etc/pam.d/password-auth \
   && echo 'session     optional      pam_mkhomedir.so skel=/etc/skel/ umask=0077' >> /etc/pam.d/password-auth \
-  && setcap cap_net_admin,cap_net_raw+p /usr/bin/ping
+  && setcap cap_net_admin,cap_net_raw+p /usr/bin/ping \
+  && echo 'umask 0027' >> /etc/profile
 
 COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
 COPY s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
