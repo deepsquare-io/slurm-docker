@@ -2,14 +2,11 @@
 FROM quay.io/rockylinux/rockylinux:8.5 AS slurm-base
 # ----------------------------------------------------
 
-COPY csquare.gcloud.ca.pem /etc/pki/ca-trust/source/anchors
-
 # Install dependencies
-RUN update-ca-trust \
-  && dnf install -y \
+RUN dnf install -y \
   dnf-plugins-core \
   epel-release \
-  && dnf config-manager --add-repo https://csquare:VCyV78sQ@yum.csquare.gcloud/yum.repo \
+  && dnf config-manager --add-repo https://csquare:VCyV78sQ@yum.csquare.run/yum.repo \
   && dnf install -y \
   slurm \
   sssd \
@@ -95,7 +92,7 @@ ENTRYPOINT ["/init"]
 FROM slurm-base AS slurm-slurmctld
 # -------------------------------------------------------
 
-RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.5/dists/beegfs-rocky.repo \
+RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dists/beegfs-rocky.repo \
   && dnf config-manager --set-enabled powertools \
   && dnf install -y \
   slurm-slurmctld \
