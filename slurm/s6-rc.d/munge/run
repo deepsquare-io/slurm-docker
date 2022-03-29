@@ -2,5 +2,6 @@
 set -ex
 
 cp /secrets/munge/munge.key /etc/munge/munge.key
+mkdir -p /etc/munge /var/lib/munge /var/log/munge /var/run/munge
 chown -R munge: /etc/munge /var/lib/munge /var/log/munge /var/run/munge
 s6-setuidgid munge /usr/sbin/munged -F

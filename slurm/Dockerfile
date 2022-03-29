@@ -92,7 +92,7 @@ ENTRYPOINT ["/init"]
 FROM slurm-base AS slurm-slurmctld
 # -------------------------------------------------------
 
-RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dists/beegfs-rocky.repo \
+RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dists/beegfs-rhel8.repo \
   && dnf config-manager --set-enabled powertools \
   && dnf install -y \
   slurm-slurmctld \
