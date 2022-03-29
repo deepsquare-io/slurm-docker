@@ -10,7 +10,7 @@ chown slurm:slurm /var/spool/slurm/jwt_hs256.key
 chmod 0600 /var/spool/slurm/jwt_hs256.key
 chown root:root /etc/slurm
 chmod 0755 /etc/slurm
-mkdir -p /var/spool/slurmctl /var/run/slurmctl
-chown -R slurm: /var/spool/slurmctl /var/run/slurmctl
+mkdir -p /var/spool/slurmctl /var/run/slurmctl /var/log/slurm
+chown -R slurm: /var/spool/slurmctl /var/run/slurmctl /var/log/slurm
 set -e
 /usr/sbin/slurmctld -D
