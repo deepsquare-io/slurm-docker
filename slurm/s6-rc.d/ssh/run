@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -x
 
 cp /secrets/sshd/ssh_host_*_key /etc/ssh/
 chmod 600 /etc/ssh/ssh_host_*_key
@@ -10,4 +10,5 @@ done
 
 rm -f /run/nologin
 
+set -e
 /usr/sbin/sshd -D

@@ -1,9 +1,10 @@
 #!/bin/bash
-set -ex
+set -x
 while ! id slurm; do
   sleep 1
 done
 chown root:root /etc/slurm
 chmod 0755 /etc/slurm
 chown -R slurm: /var/spool/slurmd /var/run/slurmd
+set -e
 /usr/sbin/slurmd -D
