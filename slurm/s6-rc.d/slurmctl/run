@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 mkdir -p /var/spool/slurm
-cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key
+cp -p /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key
 
 while ! id slurm; do
   sleep 1
@@ -10,6 +10,7 @@ chown slurm:slurm /var/spool/slurm/jwt_hs256.key
 chmod 0600 /var/spool/slurm/jwt_hs256.key
 chown root:root /etc/slurm
 chmod 0755 /etc/slurm
+mkdir -p /var/spool/slurmctl /var/run/slurmctl
 chown -R slurm: /var/spool/slurmctl /var/run/slurmctl
 set -e
 /usr/sbin/slurmctld -D
