@@ -68,6 +68,11 @@ RUN dnf config-manager --set-enabled powertools \
   sudo \
   htop \
   procps \
+  net-tools \
+  bind-utils \
+  iproute \
+  netcat \
+  rsync \
   && dnf clean all
 
 RUN sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t077|g' /etc/login.defs \
