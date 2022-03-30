@@ -112,6 +112,9 @@ RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dis
   beeond \
   jq \
   openssh-clients \
+  net-tools \
+  bind-utils \
+  iproute \
   && dnf clean all
 
 # Beeond SSH configuration

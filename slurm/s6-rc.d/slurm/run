@@ -5,7 +5,7 @@ while ! id slurm; do
 done
 chown root:root /etc/slurm
 chmod 0755 /etc/slurm
-mkdir -p /var/spool/slurmd /var/run/slurmd
+mkdir -p /var/spool/slurmd /var/run/slurmd /var/log/slurm
 chown -R slurm: /var/spool/slurmd /var/run/slurmd
 set -e
 /usr/sbin/slurmd -D
