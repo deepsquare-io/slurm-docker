@@ -113,6 +113,7 @@ RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dis
   hwloc-libs \
   hwloc-devel \
   pdsh \
+  pdsh-rcmd-ssh \
   sudo \
   beeond \
   jq \
@@ -120,16 +121,21 @@ RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dis
   net-tools \
   bind-utils \
   iproute \
+  which \
+  procps \
+  screen \
   && dnf clean all
 
-# Beeond SSH configuration
-RUN echo "slurm	ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
+# Beeond configuration
+RUN echo "slurm ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
   && mkdir -p /root/.ssh \
   && chmod 700 /root/.ssh \
   && echo -e "Host *\n\
   StrictHostKeyChecking no\n" \
   > /root/.ssh/config \
-  && chmod 600 /root/.ssh/config
+  && chmod 600 /root/.ssh/config \
+  && mkdir -p /etc/pdsh \
+  && echo "ssh" > /etc/pdsh/rcmd_default
 
 COPY s6-rc.d/slurmctl/ /etc/s6-overlay/s6-rc.d/slurmctl/
 COPY s6-rc.d/user/contents.d/slurmctl /etc/s6-overlay/s6-rc.d/user/contents.d/
