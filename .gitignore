@@ -1,0 +1,14 @@
+**/certs/*
+**/secrets/*
+**/state
+**/logs
+**/slurm_powersave/slurmctl-keypair
+**/jobs-costs
+
+!**/.gitkeep
+
+!secrets/.gitkeep
+!secrets/munge/.gitkeep
+!secrets/slurm/.gitkeep
+!secrets/sssd/.gitkeep
+!secrets/ssh/.gitkeep
