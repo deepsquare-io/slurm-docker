@@ -21,24 +21,24 @@ RUN mkdir -p /run/munge && chown munge:munge /run/munge \
   && mkdir -p /var/log/{slurm,slurmctl,slurmdb}/
 ENV SLURM_CONF=/etc/slurm/slurm.conf
 
-ENV S6_OVERLAY_VERSION=3.0.0.2
-
 RUN authselect select sssd --force
 
 COPY s6-rc.d/munge/ /etc/s6-overlay/s6-rc.d/munge/
 COPY s6-rc.d/sss/ /etc/s6-overlay/s6-rc.d/sss/
-COPY s6-rc.d/user/contents.d/munge s6-rc.d/user/contents.d/sss /etc/s6-overlay/s6-rc.d/user/contents.d/
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/munge \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/sss
 
-VOLUME [ "/secrets/munge", "/secrets/sssd" ]
+ENV S6_OVERLAY_VERSION=3.1.0.1
 
-RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz -o /tmp/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz \
-  && tar -C / -Jxpf /tmp/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz \
-  && curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64-${S6_OVERLAY_VERSION}.tar.xz -o /tmp/s6-overlay-x86_64-${S6_OVERLAY_VERSION}.tar.xz \
-  && tar -C / -Jxpf /tmp/s6-overlay-x86_64-${S6_OVERLAY_VERSION}.tar.xz \
+RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz -o /tmp/s6-overlay-noarch.tar.xz \
+  && tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz \
+  && curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz -o /tmp/s6-overlay-x86_64.tar.xz \
+  && tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz \
   && rm -rf /tmp/*
 
 # ----------------------------------------------------
-FROM slurm-base AS slurm-head
+FROM slurm-base AS slurm-login
 # ----------------------------------------------------
 
 # Install dependencies
@@ -85,16 +85,15 @@ RUN sed -Ei 's|UMASK\t+[0-9]+|UMASK\t\t077|g' /etc/login.defs \
   && echo 'umask 0027' >> /etc/profile
 
 COPY s6-rc.d/ssh/ /etc/s6-overlay/s6-rc.d/ssh/
-COPY s6-rc.d/user/contents.d/ssh /etc/s6-overlay/s6-rc.d/user/contents.d/
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/ssh
 
 EXPOSE 22/tcp
-
-VOLUME [ "/secrets/sshd" ]
 
 ENTRYPOINT ["/init"]
 
 # -------------------------------------------------------
-FROM slurm-base AS slurm-slurmctld
+FROM slurm-base AS slurm-controller
 # -------------------------------------------------------
 
 RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dists/beegfs-rhel8.repo \
@@ -138,16 +137,17 @@ RUN echo "slurm ALL=(root) NOPASSWD:/usr/bin/beeond" >> /etc/sudoers \
   && echo "ssh" > /etc/pdsh/rcmd_default
 
 COPY s6-rc.d/slurmctl/ /etc/s6-overlay/s6-rc.d/slurmctl/
-COPY s6-rc.d/user/contents.d/slurmctl /etc/s6-overlay/s6-rc.d/user/contents.d/
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurmctl
 
 EXPOSE 6817/tcp
 
-VOLUME [ "/secrets/slurm", "/var/spool/slurmctl" ]
+VOLUME [ "/var/spool/slurmctl" ]
 
 ENTRYPOINT ["/init"]
 
 # -------------------------------------------------------
-FROM slurm-base AS slurm-slurmrestd
+FROM slurm-base AS slurm-rest
 # -------------------------------------------------------
 
 RUN dnf install -y \
@@ -158,8 +158,45 @@ RUN dnf install -y \
 RUN groupadd -r api && useradd --no-log-init -r -g api api
 
 COPY s6-rc.d/slurmrest/ /etc/s6-overlay/s6-rc.d/slurmrest/
-COPY s6-rc.d/user/contents.d/slurmrest /etc/s6-overlay/s6-rc.d/user/contents.d/
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurmrest
 
 EXPOSE 6820/tcp
+
+ENTRYPOINT ["/init"]
+
+# -------------------------------------------------------
+FROM slurm-base AS slurm-db
+# -------------------------------------------------------
+
+RUN dnf install -y \
+  slurm-slurmdbd \
+  && dnf clean all
+
+COPY s6-rc.d/slurmdb/ /etc/s6-overlay/s6-rc.d/slurmdb/
+COPY s6-rc.d/user/contents.d/slurmdb /etc/s6-overlay/s6-rc.d/user/contents.d/
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurmdb
+
+EXPOSE 6819/tcp
+
+ENTRYPOINT ["/init"]
+
+# ----------------------------------------------------
+FROM slurm-base AS slurm-compute
+# ----------------------------------------------------
+
+# Install dependencies
+RUN dnf install -y \
+  slurm-slurmd \
+  && dnf clean all
+
+EXPOSE 6818/tcp 6820/tcp
+
+COPY s6-rc.d/slurm/ /etc/s6-overlay/s6-rc.d/slurm/
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurm
+
+VOLUME [ "/var/spool/slumd" ]
 
 ENTRYPOINT ["/init"]
