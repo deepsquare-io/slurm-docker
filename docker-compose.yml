@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  slurmctl:
+    image: slurm-base
+    restart: always
+    pull_policy: never
+    privileged: true
+    network_mode: host
+    command: ['slurmctld']
+    build:
+      context: ./slurm
+      dockerfile: Dockerfile
+    hostname: slurm-controller
+    container_name: slurm-controller
+    # ports:
+    #   - 6817:6817
+    volumes:
+      - ./slurm_powersave:/slurm_powersave:ro
+      - ./secrets/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
+      - ./sssd/sssd.conf:/etc/sssd/sssd.conf:ro
+      - ./secrets/munge.key:/secrets/munge.key:ro
+      - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
+      - ./conf:/etc/slurm:ro
+      - ./logs:/var/log/slurm
+      - ./state:/var/spool/slurmctl
+      - ./bin/fakemail:/usr/bin/fakemail:ro
