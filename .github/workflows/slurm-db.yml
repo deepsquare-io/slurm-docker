@@ -1,4 +1,4 @@
-name: SLURM Login CI
+name: SLURM DB CI
 
 on: [push, pull_request]
 

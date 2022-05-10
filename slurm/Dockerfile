@@ -174,7 +174,6 @@ RUN dnf install -y \
   && dnf clean all
 
 COPY s6-rc.d/slurmdb/ /etc/s6-overlay/s6-rc.d/slurmdb/
-COPY s6-rc.d/user/contents.d/slurmdb /etc/s6-overlay/s6-rc.d/user/contents.d/
 RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
   && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurmdb
 
