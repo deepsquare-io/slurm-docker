@@ -56,7 +56,6 @@ services:
   slurm-0:
     image: ghcr.io/squarefactory/slurm:latest-compute
     restart: always
-    pull_policy: never
     network_mode: host
     depends_on:
       - "slurmctl"
