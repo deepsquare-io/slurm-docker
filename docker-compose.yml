@@ -17,36 +17,25 @@ services:
     #   - slurmctl-net
 
   slurmdb:
-    image: slurmdb
+    image: ghcr.io/squarefactory/slurm:21.08.8-2-db
     restart: always
-    pull_policy: never
     network_mode: host
-    build:
-      context: ./slurm
-      dockerfile: Dockerfile
-      target: slurm-slurmdbd
     hostname: slurmdb
     container_name: slurmdb
     # ports:
     #   - 6819:6819
     volumes:
       - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
-      - ./secrets/sssd.conf:/etc/sssd/sssd.conf:ro
-      - ./secrets/munge.key:/secrets/munge.key:ro
-      - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
-      - ./conf:/etc/slurm:ro
-      - ./logs/slurmdb:/var/log/slurm
+      - ./secrets/sssd/:/secrets/sssd/:ro
+      - ./secrets/munge/:/secrets/munge/:ro
+      - ./secrets/slurm/:/secrets/slurm/:ro
+      - ./conf/slurm:/etc/slurm:ro
       - /mnt/nfs/archive:/archive
   slurmctl:
-    image: slurmctl
+    image: ghcr.io/squarefactory/slurm:21.08.8-2-controller
     restart: always
-    pull_policy: never
     privileged: true
     network_mode: host
-    build:
-      context: ./slurm
-      dockerfile: Dockerfile
-      target: slurm-slurmctld
     depends_on:
       - "slurmdb"
     hostname: slurmctl
@@ -55,23 +44,18 @@ services:
     #   - 6817:6817
     volumes:
       - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
-      - ./secrets/sssd.conf:/etc/sssd/sssd.conf:ro
-      - ./secrets/munge.key:/secrets/munge.key:ro
-      - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
-      - ./conf:/etc/slurm:ro
-      - ./logs/slurmctl:/var/log/slurm
+      - ./secrets/sssd/:/secrets/sssd/:ro
+      - ./secrets/munge/:/secrets/munge/:ro
+      - ./secrets/slurm/:/secrets/slurm/:ro
+      - ./conf/slurm:/etc/slurm:ro
     # networks:
     #   - slurmctl-net
 
   slurm-0:
-    image: slurm
+    image: ghcr.io/squarefactory/slurm:21.08.8-2-compute
     restart: always
     pull_policy: never
     network_mode: host
-    build:
-      context: ./slurm
-      dockerfile: Dockerfile
-      target: slurm-slurmd
     depends_on:
       - "slurmctl"
     hostname: slurm-0
@@ -82,11 +66,10 @@ services:
     #   - "6818"
     volumes:
       - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
-      - ./secrets/sssd.conf:/etc/sssd/sssd.conf:ro
-      - ./secrets/munge.key:/secrets/munge.key:ro
-      - ./secrets/jwt_hs256.key:/secrets/jwt_hs256.key:ro
-      - ./conf:/etc/slurm:ro
-      - ./logs/slurm:/var/log/slurm
+      - ./secrets/sssd/:/secrets/sssd/:ro
+      - ./secrets/munge/:/secrets/munge/:ro
+      - ./secrets/slurm/:/secrets/slurm/:ro
+      - ./conf/slurm:/etc/slurm:ro
     cpus: 0.50
     mem_reservation: 512M
     mem_limit: 512M
