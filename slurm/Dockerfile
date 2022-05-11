@@ -196,6 +196,4 @@ COPY s6-rc.d/slurm/ /etc/s6-overlay/s6-rc.d/slurm/
 RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
   && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurm
 
-VOLUME [ "/var/spool/slumd" ]
-
 ENTRYPOINT ["/init"]

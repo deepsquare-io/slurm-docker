@@ -8,9 +8,9 @@ services:
       - "slurm-0"
     volumes:
       - ./logs/nginx:/var/log/nginx
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/certs/slurmrest.csquare.gcloud.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.crt
-      - ./nginx/certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
+      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./conf/nginx/certs/slurmrest.csquare.gcloud.crt:/etc/ssl/certs/slurmrest.csquare.gcloud.crt
+      - ./conf/nginx/certs/slurmrest.csquare.gcloud.key:/etc/ssl/certs/slurmrest.csquare.gcloud.key
     # ports:
     #   - 443:443
     # networks:
@@ -31,6 +31,7 @@ services:
       - ./secrets/slurm/:/secrets/slurm/:ro
       - ./conf/slurm:/etc/slurm:ro
       - /mnt/nfs/archive:/archive
+
   slurmctl:
     image: ghcr.io/squarefactory/slurm:21.08.8-2-controller
     restart: always
@@ -48,6 +49,7 @@ services:
       - ./secrets/munge/:/secrets/munge/:ro
       - ./secrets/slurm/:/secrets/slurm/:ro
       - ./conf/slurm:/etc/slurm:ro
+      - ./state/slurmctl:/var/spool/slurmctl
     # networks:
     #   - slurmctl-net
 
@@ -70,6 +72,7 @@ services:
       - ./secrets/munge/:/secrets/munge/:ro
       - ./secrets/slurm/:/secrets/slurm/:ro
       - ./conf/slurm:/etc/slurm:ro
+      - ./state/slurmd:/var/spool/slurmd
     cpus: 0.50
     mem_reservation: 512M
     mem_limit: 512M
