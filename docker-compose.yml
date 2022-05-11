@@ -17,7 +17,7 @@ services:
     #   - slurmctl-net
 
   slurmdb:
-    image: ghcr.io/squarefactory/slurm:21.08.8-2-db
+    image: ghcr.io/squarefactory/slurm:latest-db
     restart: always
     network_mode: host
     hostname: slurmdb
@@ -33,7 +33,7 @@ services:
       - /mnt/nfs/archive:/archive
 
   slurmctl:
-    image: ghcr.io/squarefactory/slurm:21.08.8-2-controller
+    image: ghcr.io/squarefactory/slurm:latest-controller
     restart: always
     privileged: true
     network_mode: host
@@ -54,7 +54,7 @@ services:
     #   - slurmctl-net
 
   slurm-0:
-    image: ghcr.io/squarefactory/slurm:21.08.8-2-compute
+    image: ghcr.io/squarefactory/slurm:latest-compute
     restart: always
     pull_policy: never
     network_mode: host
