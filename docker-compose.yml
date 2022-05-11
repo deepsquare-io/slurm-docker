@@ -82,6 +82,7 @@ services:
     depends_on:
       - "slurmctl"
     entrypoint: ['sh', '-c', 'update-ca-trust && /init']
+    privileged: true
     expose:
       - "6820"
     volumes:
