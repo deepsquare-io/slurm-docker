@@ -31,7 +31,7 @@ services:
       - ./secrets/munge/:/secrets/munge/:ro
       - ./secrets/slurm/:/secrets/slurm/:ro
       - ./conf/slurm:/etc/slurm:ro
-      - /mnt/nfs/archive:/archive
+      - ./archive:/archive
 
   slurmctl:
     image: ghcr.io/squarefactory/slurm:latest-controller
