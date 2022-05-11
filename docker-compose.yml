@@ -63,7 +63,6 @@ services:
       - "slurmctl"
     hostname: slurm-0
     container_name: slurm-0
-    privileged: true  # Only used for REST Api
     entrypoint: ['sh', '-c', 'update-ca-trust && /init']
     # expose:
     #   - "6820"
@@ -75,6 +74,22 @@ services:
       - ./secrets/slurm/:/secrets/slurm/:ro
       - ./conf/slurm:/etc/slurm:ro
       - ./state/slurmd:/var/spool/slurmd
+
+
+  slurmrest:
+    image: ghcr.io/squarefactory/slurm:latest-rest
+    restart: always
+    depends_on:
+      - "slurmctl"
+    entrypoint: ['sh', '-c', 'update-ca-trust && /init']
+    expose:
+      - "6820"
+    volumes:
+      - /etc/ssl/certs/ldap-certificate.pem:/etc/pki/ca-trust/source/anchors/csquare.gcloud.ca.pem:ro
+      - ./secrets/sssd/:/secrets/sssd/:ro
+      - ./secrets/munge/:/secrets/munge/:ro
+      - ./secrets/slurm/:/secrets/slurm/:ro
+      - ./conf/slurm:/etc/slurm:ro
     cpus: 0.50
     mem_reservation: 512M
     mem_limit: 512M
