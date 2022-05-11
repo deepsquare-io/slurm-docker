@@ -22,10 +22,11 @@ services:
     network_mode: host
     hostname: slurmdb
     container_name: slurmdb
+    entrypoint: ['sh', '-c', 'update-ca-trust && /init']
     # ports:
     #   - 6819:6819
     volumes:
-      - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
+      - /etc/ssl/certs/ldap-certificate.pem:/etc/pki/ca-trust/source/anchors/csquare.gcloud.ca.pem:ro
       - ./secrets/sssd/:/secrets/sssd/:ro
       - ./secrets/munge/:/secrets/munge/:ro
       - ./secrets/slurm/:/secrets/slurm/:ro
@@ -41,10 +42,11 @@ services:
       - "slurmdb"
     hostname: slurmctl
     container_name: slurm-controller
+    entrypoint: ['sh', '-c', 'update-ca-trust && /init']
     # ports:
     #   - 6817:6817
     volumes:
-      - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
+      - /etc/ssl/certs/ldap-certificate.pem:/etc/pki/ca-trust/source/anchors/csquare.gcloud.ca.pem:ro
       - ./secrets/sssd/:/secrets/sssd/:ro
       - ./secrets/munge/:/secrets/munge/:ro
       - ./secrets/slurm/:/secrets/slurm/:ro
@@ -62,11 +64,12 @@ services:
     hostname: slurm-0
     container_name: slurm-0
     privileged: true  # Only used for REST Api
+    entrypoint: ['sh', '-c', 'update-ca-trust && /init']
     # expose:
     #   - "6820"
     #   - "6818"
     volumes:
-      - /etc/ssl/certs/ldap-certificate.pem:/etc/ssl/certs/ldap-certificate.pem:ro
+      - /etc/ssl/certs/ldap-certificate.pem:/etc/pki/ca-trust/source/anchors/csquare.gcloud.ca.pem:ro
       - ./secrets/sssd/:/secrets/sssd/:ro
       - ./secrets/munge/:/secrets/munge/:ro
       - ./secrets/slurm/:/secrets/slurm/:ro
