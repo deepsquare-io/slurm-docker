@@ -1,6 +1,10 @@
+ARG slurm_version=22.05.0-1
+
 # ----------------------------------------------------
 FROM quay.io/rockylinux/rockylinux:8.5 AS slurm-base
 # ----------------------------------------------------
+
+ARG slurm_version
 
 # Install dependencies
 RUN dnf install -y \
@@ -8,7 +12,7 @@ RUN dnf install -y \
   epel-release \
   && dnf config-manager --add-repo https://csquare:VCyV78sQ@yum.csquare.run/yum.repo \
   && dnf install -y \
-  slurm \
+  slurm-${slurm_version}.el8.x86_64 \
   sssd \
   xz \
   authselect \
@@ -41,14 +45,16 @@ RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v
 FROM slurm-base AS slurm-login
 # ----------------------------------------------------
 
+ARG slurm_version
+
 # Install dependencies
 RUN dnf config-manager --set-enabled powertools \
   && dnf install -y \
   zsh \
   nvslurm-plugin-pyxis \
-  slurm-contribs \
-  slurm-libpmi \
-  slurm-pam_slurm \
+  slurm-contribs-${slurm_version}.el8.x86_64 \
+  slurm-libpmi-${slurm_version}.el8.x86_64 \
+  slurm-pam_slurm-${slurm_version}.el8.x86_64 \
   pam_mkslurmuser \
   s3cmd \
   pmix2 \
@@ -96,14 +102,16 @@ ENTRYPOINT ["/init"]
 FROM slurm-base AS slurm-controller
 # -------------------------------------------------------
 
+ARG slurm_version
+
 RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dists/beegfs-rhel8.repo \
   && dnf config-manager --set-enabled powertools \
   && dnf install -y \
-  slurm-slurmctld \
+  slurm-slurmctld-${slurm_version}.el8.x86_64 \
   nvslurm-plugin-pyxis \
-  slurm-contribs \
-  slurm-libpmi \
-  slurm-pam_slurm \
+  slurm-contribs-${slurm_version}.el8.x86_64 \
+  slurm-libpmi-${slurm_version}.el8.x86_64 \
+  slurm-pam_slurm-${slurm_version}.el8.x86_64 \
   jobcomp-report \
   pmix2 \
   pmix3 \
@@ -150,8 +158,10 @@ ENTRYPOINT ["/init"]
 FROM slurm-base AS slurm-rest
 # -------------------------------------------------------
 
+ARG slurm_version
+
 RUN dnf install -y \
-  slurm-slurmrestd \
+  slurm-slurmrestd-${slurm_version}.el8.x86_64 \
   && dnf clean all
 
 # API user
@@ -169,8 +179,10 @@ ENTRYPOINT ["/init"]
 FROM slurm-base AS slurm-db
 # -------------------------------------------------------
 
+ARG slurm_version
+
 RUN dnf install -y \
-  slurm-slurmdbd \
+  slurm-slurmdbd-${slurm_version}.el8.x86_64 \
   && dnf clean all
 
 COPY s6-rc.d/slurmdb/ /etc/s6-overlay/s6-rc.d/slurmdb/
@@ -185,9 +197,11 @@ ENTRYPOINT ["/init"]
 FROM slurm-base AS slurm-compute
 # ----------------------------------------------------
 
+ARG slurm_version
+
 # Install dependencies
 RUN dnf install -y \
-  slurm-slurmd \
+  slurm-slurmd-${slurm_version}.el8.x86_64 \
   && dnf clean all
 
 EXPOSE 6818/tcp 6820/tcp
