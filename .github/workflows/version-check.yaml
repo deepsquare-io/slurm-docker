@@ -17,7 +17,7 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           sudo apt update && sudo apt install -y python3 curl jq sed gawk
       - name: Update Dockerfile
-        run: sh ./ci/docker_updater.sh
+        run: sh ./ci/version-checker.sh
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
