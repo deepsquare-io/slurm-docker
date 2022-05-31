@@ -5,7 +5,7 @@ services:
     restart: always
     network_mode: host
     depends_on:
-      - "slurm-0"
+      - "slurmrest"
     volumes:
       - ./logs/nginx:/var/log/nginx
       - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
