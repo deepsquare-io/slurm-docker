@@ -10,7 +10,7 @@ ARG slurm_version
 RUN dnf install -y \
   dnf-plugins-core \
   epel-release \
-  && dnf config-manager --add-repo https://csquare:VCyV78sQ@yum.csquare.run/yum.repo \
+  && dnf config-manager --add-repo https://yum.deepsquare.run/yum.repo \
   && dnf install -y \
   slurm-${slurm_version}.el8.x86_64 \
   sssd \
