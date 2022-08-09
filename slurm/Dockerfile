@@ -231,11 +231,6 @@ ARG slurm_version
 
 WORKDIR /app
 
-# Install dependencies
-RUN dnf install -y \
-  slurm-${slurm_version}.el8.x86_64 \
-  && dnf clean all
-
 COPY --from=slurm-prometheus-exporter-builder /app/prometheus-slurm-exporter/app /usr/sbin/slurm-prometheus-exporter
 
 EXPOSE 8080/tcp
