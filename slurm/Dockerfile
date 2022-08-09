@@ -211,3 +211,37 @@ RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
   && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurm
 
 ENTRYPOINT ["/init"]
+
+# ----------------------------------------------------
+FROM docker.io/library/golang:1.18.4 AS slurm-prometheus-exporter-builder
+# ----------------------------------------------------
+
+WORKDIR /app
+RUN apt update -y -q \
+  && apt install -y -q git \
+  && rm -rf /var/lib/apt/lists/*
+RUN git clone --depth 1 -b development https://github.com/vpenso/prometheus-slurm-exporter.git prometheus-slurm-exporter
+RUN cd prometheus-slurm-exporter && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o app .
+
+# ----------------------------------------------------
+FROM slurm-base AS slurm-prometheus-exporter
+# ----------------------------------------------------
+
+ARG slurm_version
+
+WORKDIR /app
+
+# Install dependencies
+RUN dnf install -y \
+  slurm-${slurm_version}.el8.x86_64 \
+  && dnf clean all
+
+COPY --from=slurm-prometheus-exporter-builder /app/prometheus-slurm-exporter/app /usr/sbin/slurm-prometheus-exporter
+
+EXPOSE 8080/tcp
+
+COPY s6-rc.d/slurm-prometheus-exporter/ /etc/s6-overlay/s6-rc.d/slurm-prometheus-exporter/
+RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
+  && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurm-prometheus-exporter
+
+ENTRYPOINT ["/init"]

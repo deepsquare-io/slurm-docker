@@ -1,0 +1,11 @@
+#!/bin/bash
+set -x
+mkdir -p /var/spool/slurm
+
+while ! id slurm; do
+  sleep 1
+done
+chown root:root /etc/slurm
+chmod 0755 /etc/slurm
+set -e
+/usr/sbin/slurm-prometheus-exporter
