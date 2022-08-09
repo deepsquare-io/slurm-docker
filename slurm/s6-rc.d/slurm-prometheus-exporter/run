@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/command/with-contenv sh
 set -x
 mkdir -p /var/spool/slurm
 
@@ -8,4 +8,9 @@ done
 chown root:root /etc/slurm
 chmod 0755 /etc/slurm
 set -e
-/usr/sbin/slurm-prometheus-exporter
+
+if [ "${GPU_ACCT}" = "true" ]; then
+  /usr/sbin/slurm-prometheus-exporter -gpus-acct
+else
+  /usr/sbin/slurm-prometheus-exporter
+fi

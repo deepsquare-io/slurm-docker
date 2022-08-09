@@ -33,7 +33,7 @@ RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
   && touch /etc/s6-overlay/s6-rc.d/user/contents.d/munge \
   && touch /etc/s6-overlay/s6-rc.d/user/contents.d/sss
 
-ENV S6_OVERLAY_VERSION=3.1.0.1
+ENV S6_OVERLAY_VERSION=3.1.1.2
 
 RUN curl -fsSL https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz -o /tmp/s6-overlay-noarch.tar.xz \
   && tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz \
@@ -238,5 +238,7 @@ EXPOSE 8080/tcp
 COPY s6-rc.d/slurm-prometheus-exporter/ /etc/s6-overlay/s6-rc.d/slurm-prometheus-exporter/
 RUN mkdir -p /etc/s6-overlay/s6-rc.d/user/contents.d/ \
   && touch /etc/s6-overlay/s6-rc.d/user/contents.d/slurm-prometheus-exporter
+
+ENV GPU_ACCT false
 
 ENTRYPOINT ["/init"]
