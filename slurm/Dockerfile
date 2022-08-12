@@ -1,7 +1,8 @@
-ARG slurm_version=22.05.2-1
+ARG slurm_version=22.05.3-1
+ARG rocky_version=8.5
 
 # ----------------------------------------------------
-FROM quay.io/rockylinux/rockylinux:8.5 AS slurm-base
+FROM quay.io/rockylinux/rockylinux:${rocky_version} AS slurm-base
 # ----------------------------------------------------
 
 ARG slurm_version
@@ -12,7 +13,7 @@ RUN dnf install -y \
   epel-release \
   && dnf config-manager --add-repo https://yum.deepsquare.run/yum.repo \
   && dnf install -y \
-  slurm-${slurm_version}.el8.x86_64 \
+  slurm-${slurm_version} \
   sssd \
   xz \
   authselect \
@@ -52,9 +53,9 @@ RUN dnf config-manager --set-enabled powertools \
   && dnf install -y \
   zsh \
   nvslurm-plugin-pyxis \
-  slurm-contribs-${slurm_version}.el8.x86_64 \
-  slurm-libpmi-${slurm_version}.el8.x86_64 \
-  slurm-pam_slurm-${slurm_version}.el8.x86_64 \
+  slurm-contribs-${slurm_version} \
+  slurm-libpmi-${slurm_version} \
+  slurm-pam_slurm-${slurm_version} \
   pam_mkslurmuser \
   s3cmd \
   pmix2 \
@@ -107,11 +108,11 @@ ARG slurm_version
 RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dists/beegfs-rhel8.repo \
   && dnf config-manager --set-enabled powertools \
   && dnf install -y \
-  slurm-slurmctld-${slurm_version}.el8.x86_64 \
+  slurm-slurmctld-${slurm_version} \
   nvslurm-plugin-pyxis \
-  slurm-contribs-${slurm_version}.el8.x86_64 \
-  slurm-libpmi-${slurm_version}.el8.x86_64 \
-  slurm-pam_slurm-${slurm_version}.el8.x86_64 \
+  slurm-contribs-${slurm_version} \
+  slurm-libpmi-${slurm_version} \
+  slurm-pam_slurm-${slurm_version} \
   jobcomp-report \
   pmix2 \
   pmix3 \
@@ -161,7 +162,7 @@ FROM slurm-base AS slurm-rest
 ARG slurm_version
 
 RUN dnf install -y \
-  slurm-slurmrestd-${slurm_version}.el8.x86_64 \
+  slurm-slurmrestd-${slurm_version} \
   && dnf clean all
 
 # API user
@@ -182,7 +183,7 @@ FROM slurm-base AS slurm-db
 ARG slurm_version
 
 RUN dnf install -y \
-  slurm-slurmdbd-${slurm_version}.el8.x86_64 \
+  slurm-slurmdbd-${slurm_version} \
   && dnf clean all
 
 COPY s6-rc.d/slurmdb/ /etc/s6-overlay/s6-rc.d/slurmdb/
@@ -201,7 +202,7 @@ ARG slurm_version
 
 # Install dependencies
 RUN dnf install -y \
-  slurm-slurmd-${slurm_version}.el8.x86_64 \
+  slurm-slurmd-${slurm_version} \
   && dnf clean all
 
 EXPOSE 6818/tcp 6820/tcp

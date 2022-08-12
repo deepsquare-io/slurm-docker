@@ -1,10 +1,15 @@
-name: SLURM Controller CI
+name: SLURM CI
 
-on: [push, pull_request]
+on:
+  push:
 
 jobs:
   build-export:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rocky_version: ['8.5', '9.0']
+        component: ['compute', 'controller', 'db', 'login', 'rest', 'prometheus-exporter']
 
     steps:
       - uses: actions/checkout@v3
@@ -20,10 +25,12 @@ jobs:
           context: ./slurm
           platforms: linux/amd64
           push: false
-          tags: squarefactory/slurm:latest-controller
+          tags: squarefactory/slurm:latest-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          target: slurm-controller
+          target: slurm-${{ matrix.component }}
+          build-args: |
+            rocky_version=${{ matrix.rocky_version }}
 
       - name: Login to GitHub Container Registry
         if: startsWith(github.ref, 'refs/tags/')
@@ -49,8 +56,10 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/squarefactory/slurm:latest-controller
-            ghcr.io/squarefactory/slurm:${{ steps.get_version.outputs.VERSION }}-controller
+            ghcr.io/squarefactory/slurm:latest-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
+            ghcr.io/squarefactory/slurm:${{ steps.get_version.outputs.VERSION }}-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          target: slurm-controller
+          target: slurm-${{ matrix.component }}
+          build-args: |
+            rocky_version=${{ matrix.rocky_version }}
