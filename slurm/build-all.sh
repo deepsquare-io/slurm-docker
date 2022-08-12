@@ -1,5 +1,5 @@
 #!/bin/sh
-slurm_version=22.05.2-1
+slurm_version=22.05.3-1
 docker build . -t ghcr.io/squarefactory/slurm:${slurm_version}-controller --target slurm-controller
 docker build . -t ghcr.io/squarefactory/slurm:${slurm_version}-login --target slurm-login
 docker build . -t ghcr.io/squarefactory/slurm:${slurm_version}-rest --target slurm-rest
