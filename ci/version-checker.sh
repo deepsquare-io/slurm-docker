@@ -7,5 +7,7 @@ META="$(curl -fsSL "https://raw.githubusercontent.com/SchedMD/slurm/${slurm_tag}
 slurm_version=$(echo "${META}" | grep 'Version:' | sed -E 's/.*Version:\t+(.*)/\1/g')
 slurm_release=$(echo "${META}" | grep 'Release:' | sed -E 's/.*Release:\t+(.*)/\1/g')
 slurm_definitive_version="${slurm_version}-${slurm_release}"
-sed -i "s/slurm_version=.*\$/slurm_version=${slurm_definitive_version}/g" ./slurm/Dockerfile
-sed -i "s/slurm_version=.*\$/slurm_version=${slurm_definitive_version}/g" ./slurm/build-all.sh
+sed -i "s/slurm_version=.*\$/slurm_version=${slurm_definitive_version}/g" ./slurm/Dockerfile.rocky8.5
+sed -i "s/slurm_version=.*\$/slurm_version=${slurm_definitive_version}/g" ./slurm/Dockerfile.rocky9.0
+sed -i "s/slurm_version=.*\$/slurm_version=${slurm_definitive_version}/g" ./slurm/build-all.rocky8.5.sh
+sed -i "s/slurm_version=.*\$/slurm_version=${slurm_definitive_version}/g" ./slurm/build-all.rocky9.0.sh
