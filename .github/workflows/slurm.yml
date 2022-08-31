@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rocky_version: ['8.5', '9.0']
+        rocky_version: ['8.6', '9.0']
         component: ['compute', 'controller', 'db', 'login', 'rest', 'prometheus-exporter']
 
     steps:
