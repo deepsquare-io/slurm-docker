@@ -104,7 +104,7 @@ FROM slurm-base AS slurm-controller
 
 ARG slurm_version
 
-RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.2.6/dists/beegfs-rhel8.repo \
+RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.3.1/dists/beegfs-rhel8.repo \
   && dnf config-manager --set-enabled powertools \
   && dnf install -y \
   slurm-slurmctld-${slurm_version}.el8.x86_64 \
