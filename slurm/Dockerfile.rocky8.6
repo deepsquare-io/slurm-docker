@@ -109,7 +109,7 @@ RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.3.1/dis
   slurm-contribs-${slurm_version}.el8.x86_64 \
   slurm-libpmi-${slurm_version}.el8.x86_64 \
   slurm-pam_slurm-${slurm_version}.el8.x86_64 \
-  jobcomp-provider-1.0.1.el8.x86_64 \
+  jobcomp-provider-1.0.1-1.el8.x86_64 \
   pmix2 \
   pmix3 \
   pmix4 \
@@ -201,7 +201,7 @@ RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.3.1/dis
   && dnf config-manager --set-enabled powertools \
   && dnf install -y \
   slurm-slurmd-${slurm_version}.el8.x86_64 \
-  spank-provider-1.0.1.el8.x86_64 \
+  spank-provider-1.0.1-1.el8.x86_64 \
   pmix2 \
   pmix3 \
   pmix4 \
