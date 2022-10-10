@@ -107,7 +107,7 @@ RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.3.1/dis
   slurm-contribs-${slurm_version}.el9.x86_64 \
   slurm-libpmi-${slurm_version}.el9.x86_64 \
   slurm-pam_slurm-${slurm_version}.el9.x86_64 \
-  jobcomp-provider \
+  jobcomp-provider-1.0.1.el9.x86_64 \
   pmix4 \
   hwloc \
   hwloc-libs \
@@ -197,7 +197,7 @@ RUN dnf config-manager --add-repo https://www.beegfs.io/release/beegfs_7.3.1/dis
   && dnf config-manager --set-enabled crb \
   && dnf install -y \
   slurm-slurmd-${slurm_version}.el9.x86_64 \
-  spank-provider \
+  spank-provider-1.0.1.el9.x86_64 \
   pmix4 \
   hwloc \
   hwloc-libs \
