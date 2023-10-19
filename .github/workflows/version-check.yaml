@@ -17,7 +17,7 @@ jobs:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ steps.generate_token.outputs.token }}
 
@@ -29,7 +29,7 @@ jobs:
         run: sh ./ci/version-checker.sh
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v5
         with:
           commit-message: 'chore: update dependencies'
           delete-branch: true
