@@ -55,7 +55,7 @@ jobs:
           context: ./slurm
           platforms: linux/amd64
           push: false
-          tags: squarefactory/slurm:latest-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
+          tags: deepsquare-io/slurm:latest-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           target: slurm-${{ matrix.component }}
@@ -84,8 +84,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/squarefactory/slurm:latest-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
-            ghcr.io/squarefactory/slurm:${{ steps.get_version.outputs.VERSION }}-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
+            ghcr.io/deepsquare-io/slurm:latest-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
+            ghcr.io/deepsquare-io/slurm:${{ steps.get_version.outputs.VERSION }}-${{ matrix.component }}-rocky${{ matrix.rocky_version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           target: slurm-${{ matrix.component }}
