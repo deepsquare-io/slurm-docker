@@ -1,4 +1,4 @@
-ARG slurm_version=22.05.3-1
+ARG slurm_version=23.02.6-1
 
 # ----------------------------------------------------
 FROM quay.io/rockylinux/rockylinux:9.0 AS slurm-base
