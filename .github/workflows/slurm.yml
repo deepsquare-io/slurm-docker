@@ -73,7 +73,7 @@ jobs:
         id: get_version
         run: |
           OCI_VERSION=$(echo ${GITHUB_REF#refs/*/} | sed 's/+/-/g')
-          echo ::set-output name=VERSION::${OCI_VERSION}
+          echo "VERSION=${OCI_VERSION}" >> $GITHUB_OUTPUT
 
       - name: Build and export
         if: startsWith(github.ref, 'refs/tags/')
