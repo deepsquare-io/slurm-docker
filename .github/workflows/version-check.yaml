@@ -29,7 +29,7 @@ jobs:
         run: sh ./ci/version-checker.sh
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           commit-message: 'chore: update dependencies'
           delete-branch: true
